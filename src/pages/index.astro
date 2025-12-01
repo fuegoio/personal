@@ -1,15 +1,14 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Separator from "../components/separator.astro";
+import Project from "../components/project.astro";
 
-import { Image } from "astro:assets";
 import tracktrip from "../assets/tracktrip.png";
-
-import { Github, ArrowUpRight } from "@lucide/astro";
+import mots from "../assets/mots.png";
 ---
 
 <Layout>
-  <main class="max-w-xl mx-auto px-4 py-8 pt-16 space-y-8">
+  <main class="max-w-xl mx-auto px-4 pt-16 space-y-8 pb-20">
     <div>
       <h1 class="font-semibold text-lg">Alexis Tacnet</h1>
       <Separator />
@@ -27,42 +26,42 @@ import { Github, ArrowUpRight } from "@lucide/astro";
     </p>
 
     <div class="flex space-x-4 mt-16">
-      <a href="https://github.com/fuegoio" class="text-sm" target="_blank"
-        >GitHub</a
-      >
+      <a href="https://github.com/fuegoio" class="text-sm" target="_blank">
+        GitHub
+      </a>
       <a
         href="https://www.linkedin.com/in/alexis-tacnet-aa0478109/"
         class="text-sm"
-        target="_blank">LinkedIn</a
+        target="_blank"
       >
-      <a href="https://x.com/fuegoio" class="text-sm" target="_blank">Twitter</a
-      >
+        LinkedIn
+      </a>
+      <a href="https://x.com/fuegoio" class="text-sm" target="_blank">
+        Twitter
+      </a>
     </div>
 
     <Separator class="h-2" />
 
     <div class="font-semibold">My projects</div>
 
-    <div class="border">
-      <Image src={tracktrip} alt="Tracktrip" class="w-full" />
-      <div class="p-4">
-        <div class="flex items-center gap-4">
-          <a
-            class="font-semibold flex-1"
-            href="https://tracktrip.app"
-            target="_blank"
-          >
-            <span class="underline"> Tracktrip </span>
-            <ArrowUpRight size={16} class="inline" />
-          </a>
-          <div class="text-gray-500 text-sm">2025</div>
-          <a href="https://github.com/fuegoio/tracktrip" target="_blank">
-            <Github size={14} />
-          </a>
-        </div>
-        <div class="text-sm">Open-source expense tracker for travelers.</div>
-      </div>
-    </div>
+    <Project
+      name="Tracktrip"
+      url="https://tracktrip.app"
+      githubUrl="https://github.com/fuegoio/tracktrip"
+      year="2025"
+      description="Open-source expense tracker for travelers."
+      imageSrc={tracktrip}
+    />
+
+    <Project
+      name="Mots"
+      url="https://mots.alexistac.net"
+      githubUrl="https://github.com/fuegoio/mots"
+      year="2022"
+      description="A portable dictionary to learn new words."
+      imageSrc={mots}
+    />
   </main>
 </Layout>
 

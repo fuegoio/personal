@@ -1,0 +1,37 @@
+---
+import { Github, ArrowUpRight } from "@lucide/astro";
+import { Image } from "astro:assets";
+
+interface Props {
+  name: string;
+  url: string;
+  githubUrl: string;
+  year: string;
+  description: string;
+  imageSrc: any;
+}
+
+const { name, url, githubUrl, year, description, imageSrc, imageAlt } =
+  Astro.props;
+---
+
+<div class="border">
+  <Image
+    src={imageSrc}
+    alt={name}
+    class="w-full max-h-[200px] object-cover object-top border-b"
+  />
+  <div class="p-4">
+    <div class="flex items-center gap-4">
+      <a class="font-semibold flex-1" href={url} target="_blank">
+        <span class="underline"> {name} </span>
+        <ArrowUpRight size={16} class="inline" />
+      </a>
+      <div class="text-gray-500 text-sm">{year}</div>
+      <a href={githubUrl} target="_blank">
+        <Github size={14} />
+      </a>
+    </div>
+    <div class="text-sm">{description}</div>
+  </div>
+</div>
