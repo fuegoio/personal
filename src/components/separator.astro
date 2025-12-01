@@ -1,0 +1,11 @@
+---
+import { cn } from "@/lib/utils";
+
+const { class: className } = Astro.props;
+---
+
+<div class={cn("flex space-x-2 h-4 mt-2", className)}>
+  <div class="h-full bg-gray-600 w-2"></div>
+  <div class="h-full bg-gray-700 w-2"></div>
+  <div class="h-full bg-gray-950 w-full"></div>
+</div>
