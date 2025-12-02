@@ -54,3 +54,14 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Deploy in production
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.CENTAURUS_IP }}
+          username: ${{ secrets.CENTAURUS_USER }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd personal/
+            docker compose pull website; docker compose up -d website;
