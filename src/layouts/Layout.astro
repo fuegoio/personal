@@ -7,9 +7,32 @@ import "@/styles/global.css";
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
+
     <title>Alexis Tacnet</title>
+    <meta
+      name="description"
+      content="Tech engineer. I love to design, code, and deploy stuff."
+    />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="author" content="Alexis Tacnet" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+
+    <!-- Sitemap -->
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    {
+      import.meta.env.PROD && (
+        <script
+          defer
+          src="https://umami.alexistac.net/script.js"
+          data-website-id="c96e63cf-c538-41fb-a6d3-5a0fd4bfa972"
+        />
+      )
+    }
   </head>
   <body>
     <slot />
