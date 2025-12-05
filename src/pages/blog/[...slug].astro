@@ -1,0 +1,52 @@
+---
+import Separator from "@/components/separator.astro";
+import Layout from "@/layouts/Layout.astro";
+import { ArrowLeft } from "@lucide/astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<Layout>
+  <main class="max-w-2xl mx-auto px-4 pt-16 space-y-8 pb-20">
+    <div>
+      <div class="flex items-center gap-2 justify-between">
+        <a
+          href="/blog"
+          class="inline-flex items-center gap-2 text-gray-400 hover:text-gray-600 transition-colors"
+        >
+          <ArrowLeft class="w-5 h-5" />
+          Back to blog
+        </a>
+        <a href="/" class="font-semibold text-lg">Alexis Tacnet</a>
+      </div>
+      <Separator />
+    </div>
+
+    <div class="pt-16 pb-4">
+      <p class="text-gray-400">
+        {
+          post.data.pubDate.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })
+        }
+      </p>
+      <h1 class="text-4xl/snug font-bold mt-1">{post.data.title}</h1>
+    </div>
+
+    <div class="prose w-full max-w-none pb-20">
+      <Content />
+    </div>
+  </main>
+</Layout>

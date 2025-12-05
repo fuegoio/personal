@@ -1,0 +1,49 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import Separator from "@/components/separator.astro";
+
+const posts = (await getCollection("blog")).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+---
+
+<Layout>
+  <main class="max-w-2xl mx-auto px-4 pt-16 space-y-8 pb-20">
+    <div>
+      <div class="flex items-center gap-2 justify-between">
+        <a
+          href="/blog"
+          class="inline-flex items-center gap-2 text-gray-400 hover:text-gray-600 transition-colors"
+        >
+          Blog
+        </a>
+        <a href="/" class="font-semibold text-lg">Alexis Tacnet</a>
+      </div>
+      <Separator />
+    </div>
+
+    <ul>
+      {
+        posts.map((post) => (
+          <li>
+            <a
+              href={`/blog/${post.id}`}
+              class="flex items-center justify-between text-gray-800 hover:text-gray-500 transition-colors"
+            >
+              {post.data.title}
+
+              <span class="text-gray-400">
+                {post.data.pubDate.toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </main>
+</Layout>
