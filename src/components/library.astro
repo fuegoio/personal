@@ -20,7 +20,7 @@ const { name, url, githubUrl, year, description } = Astro.props;
         <ArrowUpRight size={16} class="inline" />
       </a>
       <div class="text-gray-500 text-sm">{year}</div>
-      <a href={githubUrl} target="_blank">
+      <a href={githubUrl} target="_blank" aria-label="View GitHub repository">
         <Github size={14} />
       </a>
     </div>
