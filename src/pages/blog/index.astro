@@ -28,7 +28,7 @@ const posts = (await getCollection("blog")).sort(
         posts.map((post) => (
           <li>
             <a
-              href={`/blog/${post.id}`}
+              href={`/blog/${post.id}/`}
               class="flex items-center justify-between text-gray-800 hover:text-gray-500 transition-colors"
             >
               {post.data.title}
