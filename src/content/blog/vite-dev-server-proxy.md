@@ -2,6 +2,7 @@
 title: Add a custom API server to the Vite dev server
 description: How to add a custom server, to host an API for example, on the same origin as your Vite dev server easily
 pubDate: 2025-12-05
+category: web
 ---
 
 I'm a big fan of Bun, especially their embedded server `Bun.serve`. Being integrated in their standard library, it feels native and simple, without the need to install any dependency. I really like to create simple API servers with it.

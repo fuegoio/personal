@@ -1,5 +1,33 @@
 ---
 import "@/styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  article?: {
+    publishedTime: string;
+    modifiedTime?: string;
+    section: string;
+  };
+}
+
+const defaultTitle = "Alexis Tacnet — Software Engineer, SRE and Designer";
+const defaultDescription =
+  "Software engineer, SRE and Designer. I love to design, code, and deploy stuff.";
+const defaultImage = "/og-image.jpg";
+
+const {
+  title,
+  description = defaultDescription,
+  image = defaultImage,
+  article,
+} = Astro.props;
+
+let computedTitle = defaultTitle;
+if (title) {
+  computedTitle = `${title} — Alexis Tacnet`;
+}
 ---
 
 <!doctype html>
@@ -13,19 +41,58 @@ import "@/styles/global.css";
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-    <title>Alexis Tacnet</title>
-    <meta
-      name="description"
-      content="Tech engineer. I love to design, code, and deploy stuff."
-    />
+    <title>{computedTitle}</title>
+    <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
     <meta name="author" content="Alexis Tacnet" />
 
     <!-- Canonical URL -->
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
 
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site)} />
+    <meta property="og:title" content={computedTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(image, Astro.site)} />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:creator" content="@fuegoio" />
+    <meta name="twitter:title" content={computedTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(image, Astro.site)} />
+
     <!-- Sitemap -->
     <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <!-- Robots -->
+    <meta name="robots" content="index, follow" />
+
+    <!-- Additional SEO -->
+    <meta
+      name="keywords"
+      content="tech, engineering, development, design, blog, coding, projects"
+    />
+
+    <!-- Article-specific (for blog posts) -->
+    {
+      article && (
+        <>
+          <meta
+            property="article:published_time"
+            content={article.publishedTime}
+          />
+          <meta
+            property="article:modified_time"
+            content={article.modifiedTime || article.publishedTime}
+          />
+          <meta property="article:author" content="Alexis Tacnet" />
+          <meta property="article:section" content={article.section} />
+          <meta property="og:type" content="article" />
+        </>
+      )
+    }
 
     <!-- Preconnect -->
     <link rel="preconnect" href="https://umami.alexistac.net" />

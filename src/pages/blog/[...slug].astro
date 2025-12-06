@@ -16,7 +16,16 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 ---
 
-<Layout>
+<Layout
+  title={post.data.title}
+  description={post.data.description}
+  image={post.data.image}
+  article={{
+    publishedTime: post.data.pubDate.toISOString(),
+    modifiedTime: post.data.updatedDate?.toISOString(),
+    section: post.data.category,
+  }}
+>
   <main class="max-w-2xl mx-auto px-4 pt-16 space-y-8 pb-20">
     <div>
       <div class="flex items-center gap-2 justify-between">
