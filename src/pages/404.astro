@@ -1,0 +1,52 @@
+---
+import "@/styles/global.css";
+import { ArrowRight } from "@lucide/astro";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <title>404 — Alexis Tacnet</title>
+
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://umami.alexistac.net" />
+
+    {
+      import.meta.env.PROD && (
+        <script
+          defer
+          src="https://umami.alexistac.net/script.js"
+          data-website-id="c96e63cf-c538-41fb-a6d3-5a0fd4bfa972"
+        />
+      )
+    }
+  </head>
+  <body>
+    <div
+      class="flex flex-col items-center justify-center h-full w-full bg-background"
+    >
+      <p class="text-7xl font-bold text-foreground">404</p>
+      <p class="text-xl text-subtle-foreground">This page can't be found</p>
+      <a class="mt-8 inline-flex items-center gap-2" href="/">
+        Go home
+        <ArrowRight class="h-4 w-4" />
+      </a>
+    </div>
+
+    <style>
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </body>
+</html>
