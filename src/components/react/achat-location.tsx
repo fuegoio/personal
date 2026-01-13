@@ -312,7 +312,7 @@ export function AchatLocation() {
 
   return (
     <div className="p-4">
-      <div className="px-3 py-4 border-b border-border/70 flex justify-between items-start">
+      <div className="px-3 py-4 border-b border-border/70 flex justify-between items-start flex-col sm:flex-row gap-4">
         <div>
           <h1 className="text-4xl font-bold text-gray-800">
             Achat vs Location
@@ -343,7 +343,7 @@ export function AchatLocation() {
         </div>
       </div>
 
-      <div className="mt-4 flex gap-4">
+      <div className="mt-4 flex gap-4 flex-col lg:flex-row">
         <div className="flex flex-col gap-4">
           <div className="px-4 w-[480px]">
             <div className="text-lg font-semibold text-foreground/70">
@@ -705,7 +705,7 @@ export function AchatLocation() {
           </Card>
         </div>
 
-        <div className="flex flex-col gap-4 border-l pl-4 border-border/70 flex-1 min-w-0">
+        <div className="flex flex-col gap-4 border-t lg:border-t-none pt-4 lg:pt-0 lg:border-l lg:pl-4 border-border/70 flex-1 min-w-0">
           <div className="px-4 w-[480px]">
             <div className="text-lg font-semibold text-foreground/70">
               Simulation
