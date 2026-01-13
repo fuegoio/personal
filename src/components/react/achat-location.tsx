@@ -344,8 +344,8 @@ export function AchatLocation() {
       </div>
 
       <div className="mt-4 flex gap-4 flex-col lg:flex-row">
-        <div className="flex flex-col gap-4">
-          <div className="px-4 w-[480px]">
+        <div className="flex flex-col gap-4 max-w-[480px] w-full">
+          <div className="px-4 w-full">
             <div className="text-lg font-semibold text-foreground/70">
               Parametres
             </div>
@@ -353,7 +353,7 @@ export function AchatLocation() {
               Vos paramètres pour la simulation.
             </p>
           </div>
-          <Card className="w-[480px]">
+          <Card className="w-full">
             <CardHeader>
               <CardTitle className="text-lg font-semibold">Achat</CardTitle>
               <CardDescription>
@@ -615,7 +615,7 @@ export function AchatLocation() {
             </CardContent>
           </Card>
 
-          <Card className="w-[480px]">
+          <Card className="w-full">
             <CardHeader>
               <CardTitle className="text-lg font-semibold">Location</CardTitle>
               <CardDescription>
@@ -671,7 +671,7 @@ export function AchatLocation() {
             </CardContent>
           </Card>
 
-          <Card className="w-[480px]">
+          <Card className="w-full">
             <CardHeader>
               <CardTitle>Taux d'inflation</CardTitle>
               <CardDescription>
@@ -705,8 +705,8 @@ export function AchatLocation() {
           </Card>
         </div>
 
-        <div className="flex flex-col gap-4 border-t lg:border-t-none pt-4 lg:pt-0 lg:border-l lg:pl-4 border-border/70 flex-1 min-w-0">
-          <div className="px-4 w-[480px]">
+        <div className="flex flex-col gap-4 border-t lg:border-t-0 pt-4 lg:pt-0 lg:border-l lg:pl-4 border-border/70 flex-1 min-w-0">
+          <div className="px-4">
             <div className="text-lg font-semibold text-foreground/70">
               Simulation
             </div>
