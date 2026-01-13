@@ -143,10 +143,8 @@ function calculateMortgage(
     }
 
     // Calculate plus-value (appreciation of property value)
-    const propertyValue = amount * Math.pow(1 + plusValue / 100, year);
-    const plusValueAmount =
-      propertyValue -
-      (year === 1 ? amount : amount * Math.pow(1 + plusValue / 100, year - 1));
+    const propertyValue = amount * Math.pow(1 + plusValue / 100, year - 1);
+    const plusValueAmount = propertyValue * (plusValue / 100);
 
     // Apply inflation to costs
     const inflationRateNum =
@@ -174,6 +172,7 @@ function calculateMortgage(
       travaux: inflatedTravaux,
       plusValueAmount,
       capitalTotal,
+      propertyValue,
     });
   }
 
@@ -202,7 +201,7 @@ export function AchatLocation() {
   );
   const [plusValue, setPlusValue] = useQueryState(
     "plusValue",
-    parseAsFloat.withDefault(0),
+    parseAsFloat.withDefault(0.5),
   );
   const [taxeFonciere, setTaxeFonciere] = useQueryState(
     "taxeFonciere",
@@ -929,7 +928,8 @@ export function AchatLocation() {
                           <br />
                           <br />
                           {formatCurrency(yearData.plusValueAmount)} ={" "}
-                          {formatCurrency(amount)} * {plusValue}%
+                          {formatCurrency(yearData.propertyValue)} * {plusValue}
+                          %
                         </TooltipContent>
                       </Tooltip>
                       <Tooltip>
