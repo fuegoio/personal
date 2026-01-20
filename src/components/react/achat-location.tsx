@@ -816,8 +816,7 @@ export function AchatLocation() {
                           <span>Plus-value</span>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
-                          Intérêts de placement = Capital existant * Taux de
-                          placement
+                          Plus-value = Capital existant * Taux de placement
                         </TooltipContent>
                       </Tooltip>
                     </th>
@@ -827,8 +826,8 @@ export function AchatLocation() {
                           <span>Capital total</span>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
-                          Capital total = Capital existant + Epargne + Intérêts
-                          de placement
+                          Capital total = Capital existant + Epargne +
+                          Plus-value
                         </TooltipContent>
                       </Tooltip>
                     </th>
@@ -856,22 +855,36 @@ export function AchatLocation() {
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
                           Investissement = Coûts + Epargne
-                          <br />
-                          <br />
-                          {formatCurrency(
-                            yearData.yearlyPayment +
-                              yearData.taxeFonciere +
-                              yearData.charges +
-                              yearData.travaux,
-                          )}{" "}
-                          ={" "}
-                          {formatCurrency(
-                            yearData.taxeFonciere +
-                              yearData.charges +
-                              yearData.travaux +
-                              yearData.yearlyInterest,
-                          )}{" "}
-                          + {formatCurrency(yearData.yearlyPrincipal)}
+                          <div className="border-t mb-6 mt-2 w-full" />
+                          <div className="flex items-center justify-between">
+                            Coûts
+                            <div>
+                              {formatCurrency(
+                                yearData.taxeFonciere +
+                                  yearData.charges +
+                                  yearData.travaux +
+                                  yearData.yearlyInterest,
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            Epargne
+                            <div>
+                              {formatCurrency(yearData.yearlyPrincipal)}
+                            </div>
+                          </div>
+                          <div className="border-t my-2 w-full" />
+                          <div className="flex items-center justify-between">
+                            Investissement
+                            <div>
+                              {formatCurrency(
+                                yearData.yearlyPayment +
+                                  yearData.taxeFonciere +
+                                  yearData.charges +
+                                  yearData.travaux,
+                              )}
+                            </div>
+                          </div>
                         </TooltipContent>
                       </Tooltip>
                       <Tooltip>
@@ -888,25 +901,66 @@ export function AchatLocation() {
                         <TooltipContent side="bottom">
                           Coûts = Intérêts payés + (Taxe foncière + Charges +
                           Travaux) * Inflation
-                          <br />
-                          <br />
-                          {formatCurrency(
-                            yearData.taxeFonciere +
-                              yearData.charges +
-                              yearData.travaux +
-                              yearData.yearlyInterest,
-                          )}{" "}
-                          = {formatCurrency(yearData.yearlyInterest)} + (
-                          {formatCurrency(yearData.taxeFonciere)} +{" "}
-                          {formatCurrency(yearData.charges)} +{" "}
-                          {formatCurrency(yearData.travaux)}) *{" "}
-                          {Math.pow(
-                            1 + inflationRate / 100,
-                            yearData.year - 1,
-                          ).toLocaleString(undefined, {
-                            style: "percent",
-                            maximumSignificantDigits: 4,
-                          })}
+                          <div className="border-t mb-6 mt-2 w-full" />
+                          <div className="font-medium">Emprunt</div>
+                          <div className="flex items-center justify-between text-muted-foreground">
+                            Remboursement annuel
+                            <div>
+                              {formatCurrency(
+                                yearData.yearlyInterest +
+                                  yearData.yearlyPrincipal,
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between pl-2">
+                            Intérêts payés
+                            <div>{formatCurrency(yearData.yearlyInterest)}</div>
+                          </div>
+                          <div className="flex items-center justify-between text-muted-foreground pl-2">
+                            Capital remboursé
+                            <div>
+                              {formatCurrency(yearData.yearlyPrincipal)}
+                            </div>
+                          </div>
+                          <div className="border-t mb-4 mt-2 w-full" />
+                          <div className="flex items-center justify-between">
+                            Taxe foncière
+                            <div>{formatCurrency(yearData.taxeFonciere)}</div>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            Charges
+                            <div>{formatCurrency(yearData.charges)}</div>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            Travaux
+                            <div>{formatCurrency(yearData.travaux)}</div>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            Inflation totale depuis année 1
+                            <div>
+                              {(
+                                Math.pow(
+                                  1 + inflationRate / 100,
+                                  yearData.year - 1,
+                                ) - 1
+                              ).toLocaleString(undefined, {
+                                style: "percent",
+                                maximumSignificantDigits: 4,
+                              })}
+                            </div>
+                          </div>
+                          <div className="border-t mb-4 mt-2 w-full" />
+                          <div className="flex items-center justify-between">
+                            Coûts
+                            <div>
+                              {formatCurrency(
+                                yearData.taxeFonciere +
+                                  yearData.charges +
+                                  yearData.travaux +
+                                  yearData.yearlyInterest,
+                              )}
+                            </div>
+                          </div>
                         </TooltipContent>
                       </Tooltip>
                       <Tooltip>
@@ -917,10 +971,34 @@ export function AchatLocation() {
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
                           Epargne = Capital remboursé
-                          <br />
-                          <br />
-                          {formatCurrency(yearData.yearlyPrincipal)} ={" "}
-                          {formatCurrency(yearData.yearlyPrincipal)}
+                          <div className="border-t mb-6 mt-2 w-full" />
+                          <div className="font-medium">Emprunt</div>
+                          <div className="flex items-center justify-between text-muted-foreground gap-4">
+                            Remboursement annuel
+                            <div>
+                              {formatCurrency(
+                                yearData.yearlyInterest +
+                                  yearData.yearlyPrincipal,
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between pl-2 text-muted-foreground">
+                            Intérêts payés
+                            <div>{formatCurrency(yearData.yearlyInterest)}</div>
+                          </div>
+                          <div className="flex items-center justify-between pl-2">
+                            Capital remboursé
+                            <div>
+                              {formatCurrency(yearData.yearlyPrincipal)}
+                            </div>
+                          </div>
+                          <div className="border-t mb-4 mt-2 w-full" />
+                          <div className="flex items-center justify-between">
+                            Epargne
+                            <div>
+                              {formatCurrency(yearData.yearlyPrincipal)}
+                            </div>
+                          </div>
                         </TooltipContent>
                       </Tooltip>
                       <Tooltip>
@@ -931,11 +1009,26 @@ export function AchatLocation() {
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
                           Plus-value = Valeur du bien * Taux de plus-value
-                          <br />
-                          <br />
-                          {formatCurrency(yearData.plusValueAmount)} ={" "}
-                          {formatCurrency(yearData.propertyValue)} * {plusValue}
-                          %
+                          <div className="border-t mb-6 mt-2 w-full" />
+                          <div className="flex items-center justify-between">
+                            Valeur du bien
+                            <div>{formatCurrency(yearData.propertyValue)}</div>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            Taux de plus-value
+                            <div>
+                              {(plusValue / 100).toLocaleString(undefined, {
+                                style: "percent",
+                              })}
+                            </div>
+                          </div>
+                          <div className="border-t mb-2 mt-2 w-full" />
+                          <div className="flex items-center justify-between">
+                            Valeur du bien
+                            <div>
+                              {formatCurrency(yearData.plusValueAmount)}
+                            </div>
+                          </div>
                         </TooltipContent>
                       </Tooltip>
                       <Tooltip>
@@ -955,15 +1048,33 @@ export function AchatLocation() {
                         <TooltipContent side="bottom">
                           Capital total = Capital existant + Capital remboursé +
                           Plus-value
-                          <br />
-                          <br />
-                          {formatCurrency(yearData.capitalTotal)} ={" "}
-                          {formatCurrency(
-                            mortgageData.schedule[index - 1]?.capitalTotal ||
-                              apport - notaireFees,
-                          )}{" "}
-                          + {formatCurrency(yearData.yearlyPrincipal)} +{" "}
-                          {formatCurrency(yearData.plusValueAmount)}
+                          <div className="border-t mb-6 mt-2 w-full" />
+                          <div className="flex items-center justify-between">
+                            Capital existant
+                            <div>
+                              {formatCurrency(
+                                mortgageData.schedule[index - 1]
+                                  ?.capitalTotal || apport - notaireFees,
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            Capital remboursé
+                            <div>
+                              {formatCurrency(yearData.yearlyPrincipal)}
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            Plus-value
+                            <div>
+                              {formatCurrency(yearData.plusValueAmount)}
+                            </div>
+                          </div>
+                          <div className="border-t mb-2 mt-2 w-full" />
+                          <div className="flex items-center justify-between">
+                            Capital total
+                            <div>{formatCurrency(yearData.capitalTotal)}</div>
+                          </div>
                         </TooltipContent>
                       </Tooltip>
 
@@ -980,21 +1091,6 @@ export function AchatLocation() {
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
                           Investissement = Meme investissement que en achat
-                          <br />
-                          <br />
-                          {formatCurrency(
-                            yearData.yearlyPayment +
-                              yearData.taxeFonciere +
-                              yearData.charges +
-                              yearData.travaux,
-                          )}{" "}
-                          ={" "}
-                          {formatCurrency(
-                            yearData.taxeFonciere +
-                              yearData.charges +
-                              yearData.travaux +
-                              yearData.yearlyPayment,
-                          )}
                         </TooltipContent>
                       </Tooltip>
                       <Tooltip>
@@ -1007,19 +1103,39 @@ export function AchatLocation() {
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
                           Loyer annuel = Loyer mensuel * 12 * Inflation
-                          <br />
-                          <br />
-                          {formatCurrency(
-                            locationData.locationSchedule[index].yearlyLoyer,
-                          )}{" "}
-                          = {formatCurrency(loyer)} * 12 *{" "}
-                          {Math.pow(
-                            1 + inflationRate / 100,
-                            yearData.year - 1,
-                          ).toLocaleString(undefined, {
-                            style: "percent",
-                            maximumSignificantDigits: 4,
-                          })}
+                          <div className="border-t mb-6 mt-2 w-full" />
+                          <div className="flex items-center justify-between text-muted-foreground">
+                            Loyer mensuel
+                            <div>{formatCurrency(loyer)}</div>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            Loyer annuel
+                            <div>{formatCurrency(loyer * 12)}</div>
+                          </div>
+                          <div className="flex items-center justify-between gap-4">
+                            Inflation depuis l'année 1
+                            <div>
+                              {(
+                                Math.pow(
+                                  1 + inflationRate / 100,
+                                  yearData.year - 1,
+                                ) - 1
+                              ).toLocaleString(undefined, {
+                                style: "percent",
+                                maximumSignificantDigits: 4,
+                              })}
+                            </div>
+                          </div>
+                          <div className="border-t mb-2 mt-2 w-full" />
+                          <div className="flex items-center justify-between">
+                            Coûts
+                            <div>
+                              {formatCurrency(
+                                locationData.locationSchedule[index]
+                                  .yearlyLoyer,
+                              )}
+                            </div>
+                          </div>
                         </TooltipContent>
                       </Tooltip>
                       <Tooltip>
@@ -1032,22 +1148,36 @@ export function AchatLocation() {
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
                           Epargne = Investissement - Loyer
-                          <br />
-                          <br />
-                          {formatCurrency(
-                            locationData.locationSchedule[index].difference,
-                          )}{" "}
-                          ={" "}
-                          {formatCurrency(
-                            yearData.yearlyPayment +
-                              yearData.taxeFonciere +
-                              yearData.charges +
-                              yearData.travaux,
-                          )}{" "}
-                          -{" "}
-                          {formatCurrency(
-                            locationData.locationSchedule[index].yearlyLoyer,
-                          )}
+                          <div className="border-t mb-6 mt-2 w-full" />
+                          <div className="flex items-center justify-between">
+                            Investissement
+                            <div>
+                              {formatCurrency(
+                                yearData.yearlyPayment +
+                                  yearData.taxeFonciere +
+                                  yearData.charges +
+                                  yearData.travaux,
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            Loyer
+                            <div>
+                              {formatCurrency(
+                                locationData.locationSchedule[index]
+                                  .yearlyLoyer,
+                              )}
+                            </div>
+                          </div>
+                          <div className="border-t mb-2 mt-2 w-full" />
+                          <div className="flex items-center justify-between">
+                            Epargne
+                            <div>
+                              {formatCurrency(
+                                locationData.locationSchedule[index].difference,
+                              )}
+                            </div>
+                          </div>
                         </TooltipContent>
                       </Tooltip>
                       <Tooltip>
@@ -1060,20 +1190,31 @@ export function AchatLocation() {
                           </td>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
-                          Intérêts de placement = Capital existant * Taux de
-                          placement
-                          <br />
-                          <br />
-                          {formatCurrency(
-                            locationData.locationSchedule[index]
-                              .placementInterests,
-                          )}{" "}
-                          ={" "}
-                          {formatCurrency(
-                            locationData.locationSchedule[index - 1]
-                              ?.capitalTotalLocation || apport,
-                          )}{" "}
-                          * {tauxPlacement}%
+                          Plus-value = Capital existant * Taux de placement
+                          <div className="border-t mb-6 mt-2 w-full" />
+                          <div className="flex items-center justify-between">
+                            Capital existant
+                            <div>
+                              {formatCurrency(
+                                locationData.locationSchedule[index - 1]
+                                  ?.capitalTotalLocation || apport,
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            Taux de placement
+                            <div>{tauxPlacement}%</div>
+                          </div>
+                          <div className="border-t mb-2 mt-2 w-full" />
+                          <div className="flex items-center justify-between">
+                            Plus-value
+                            <div>
+                              {formatCurrency(
+                                locationData.locationSchedule[index]
+                                  .placementInterests,
+                              )}
+                            </div>
+                          </div>
                         </TooltipContent>
                       </Tooltip>
                       <Tooltip>
@@ -1094,28 +1235,45 @@ export function AchatLocation() {
                           </td>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
-                          Capital total = Capital existant + Epargne + Intérêts
-                          de placement
-                          <br />
-                          <br />
-                          {formatCurrency(
-                            locationData.locationSchedule[index]
-                              .capitalTotalLocation,
-                          )}{" "}
-                          ={" "}
-                          {formatCurrency(
-                            locationData.locationSchedule[index - 1]
-                              ?.capitalTotalLocation || apport,
-                          )}{" "}
-                          +{" "}
-                          {formatCurrency(
-                            locationData.locationSchedule[index].difference,
-                          )}{" "}
-                          +{" "}
-                          {formatCurrency(
-                            locationData.locationSchedule[index]
-                              .placementInterests,
-                          )}
+                          Capital total = Capital existant + Epargne +
+                          Plus-value
+                          <div className="border-t mb-6 mt-2 w-full" />
+                          <div className="flex items-center justify-between">
+                            Capital existant
+                            <div>
+                              {formatCurrency(
+                                locationData.locationSchedule[index - 1]
+                                  ?.capitalTotalLocation || apport,
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            Epargne
+                            <div>
+                              {formatCurrency(
+                                locationData.locationSchedule[index].difference,
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            Plus-value
+                            <div>
+                              {formatCurrency(
+                                locationData.locationSchedule[index]
+                                  .placementInterests,
+                              )}
+                            </div>
+                          </div>
+                          <div className="border-t mb-2 mt-2 w-full" />
+                          <div className="flex items-center justify-between">
+                            Capital total
+                            <div>
+                              {formatCurrency(
+                                locationData.locationSchedule[index]
+                                  .capitalTotalLocation,
+                              )}
+                            </div>
+                          </div>
                         </TooltipContent>
                       </Tooltip>
                     </tr>
