@@ -6,6 +6,7 @@ import Library from "../components/library.astro";
 
 import tracktrip from "../assets/tracktrip.png";
 import mots from "../assets/mots.png";
+import Tool from "@/components/tool.astro";
 ---
 
 <Layout>
@@ -89,6 +90,16 @@ import mots from "../assets/mots.png";
       githubUrl="https://github.com/fuegoio/trpc-db-collection"
       year="2025"
       description="tRPC collection for TanStack DB, enabling real time sync."
+    />
+
+    <Separator class="h-2 mt-16" />
+    <div class="font-semibold">Financial tools</div>
+
+    <Tool
+      name="Buy vs rent"
+      url="/finance/achat-location"
+      year="2026"
+      description="In France, it is commonly admitted that renting a house is loosing a lot of money, but it's not always true. This is a tool to compare the cost of buying vs renting a house."
     />
   </main>
 </Layout>
