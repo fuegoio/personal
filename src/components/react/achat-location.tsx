@@ -317,8 +317,11 @@ export function AchatLocation() {
           <h1 className="text-4xl font-bold text-gray-800">
             Achat vs Location
           </h1>
-          <p className="mt-2 text-sm text-gray-600">
-            Comparaison entre l'achat et la location d'un bien immobilier.
+          <p className="mt-2 text-xs text-gray-600 max-w-4xl">
+            En France, on dit souvent qu'acheter est plus intéressant que louer,
+            notamment à cause des loyers qui seraient "jeter de l'argent par les
+            fenetres". Mais la réalité économique est plus nuancée, comme le
+            montre ce comparatif.
           </p>
         </div>
         <div className="flex items-center gap-2">
