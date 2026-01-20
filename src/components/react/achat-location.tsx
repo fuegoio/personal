@@ -147,16 +147,12 @@ function calculateMortgage(
     const plusValueAmount = propertyValue * (plusValue / 100);
 
     // Apply inflation to costs
-    const inflationRateNum =
-      typeof inflationRate === "string"
-        ? parseFloat(inflationRate) || 0
-        : inflationRate;
     const inflatedTaxeFonciere =
-      taxeFonciere * Math.pow(1 + inflationRateNum / 100, year - 1);
+      taxeFonciere * Math.pow(1 + inflationRate / 100, year - 1);
     const inflatedCharges =
-      charges * Math.pow(1 + inflationRateNum / 100, year - 1);
+      charges * Math.pow(1 + inflationRate / 100, year - 1);
     const inflatedTravaux =
-      travaux * Math.pow(1 + inflationRateNum / 100, year - 1);
+      travaux * Math.pow(1 + inflationRate / 100, year - 1);
 
     // Calculate capital total (yearlyPrincipal - costs + plusValue)
     capitalTotal += yearlyPrincipal + plusValueAmount;
@@ -744,8 +740,8 @@ export function AchatLocation() {
                           <span>Coûts</span>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
-                          Coûts = Taxe foncière + Charges + Travaux + Intérêts
-                          payés
+                          Coûts = Intérêts payés + (Taxe foncière + Charges +
+                          Travaux) * Inflation
                         </TooltipContent>
                       </Tooltip>
                     </th>
@@ -800,7 +796,7 @@ export function AchatLocation() {
                           <span>Coûts (loyer)</span>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
-                          Loyer annuel = Loyer mensuel * 12
+                          Loyer annuel = Loyer mensuel * 12 * Inflation
                         </TooltipContent>
                       </Tooltip>
                     </th>
@@ -890,8 +886,8 @@ export function AchatLocation() {
                           </td>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
-                          Coûts = Taxe foncière + Charges + Travaux + Intérêts
-                          payés
+                          Coûts = Intérêts payés + (Taxe foncière + Charges +
+                          Travaux) * Inflation
                           <br />
                           <br />
                           {formatCurrency(
@@ -900,10 +896,17 @@ export function AchatLocation() {
                               yearData.travaux +
                               yearData.yearlyInterest,
                           )}{" "}
-                          = {formatCurrency(yearData.taxeFonciere)} +{" "}
+                          = {formatCurrency(yearData.yearlyInterest)} + (
+                          {formatCurrency(yearData.taxeFonciere)} +{" "}
                           {formatCurrency(yearData.charges)} +{" "}
-                          {formatCurrency(yearData.travaux)} +{" "}
-                          {formatCurrency(yearData.yearlyInterest)}
+                          {formatCurrency(yearData.travaux)}) *{" "}
+                          {Math.pow(
+                            1 + inflationRate / 100,
+                            yearData.year - 1,
+                          ).toLocaleString(undefined, {
+                            style: "percent",
+                            maximumSignificantDigits: 4,
+                          })}
                         </TooltipContent>
                       </Tooltip>
                       <Tooltip>
@@ -1003,13 +1006,20 @@ export function AchatLocation() {
                           </td>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
-                          Loyer annuel = Loyer mensuel * 12
+                          Loyer annuel = Loyer mensuel * 12 * Inflation
                           <br />
                           <br />
                           {formatCurrency(
                             locationData.locationSchedule[index].yearlyLoyer,
                           )}{" "}
-                          = {formatCurrency(loyer)} * 12
+                          = {formatCurrency(loyer)} * 12 *{" "}
+                          {Math.pow(
+                            1 + inflationRate / 100,
+                            yearData.year - 1,
+                          ).toLocaleString(undefined, {
+                            style: "percent",
+                            maximumSignificantDigits: 4,
+                          })}
                         </TooltipContent>
                       </Tooltip>
                       <Tooltip>
