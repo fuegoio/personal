@@ -43,6 +43,13 @@ import {
   parseAsString,
   useQueryState,
 } from "nuqs";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "./ui/chart";
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 
 const DESCRIPTIONS = {
   achat: {
@@ -70,6 +77,17 @@ const DESCRIPTIONS = {
       "On peut alors comparer le capital dans le cas d'un achat avec celui dans le cas d'une location, qui peut en fait être plus élevé avant une certaine année !",
   },
 } as const;
+
+const chartConfig = {
+  achat: {
+    label: "Achat",
+    color: "var(--chart-1)",
+  },
+  location: {
+    label: "Location",
+    color: "var(--chart-2)",
+  },
+} satisfies ChartConfig;
 
 // Location calculation function
 function calculateLocation(
@@ -337,10 +355,10 @@ export function AchatLocation() {
     <div className="p-4">
       <div className="px-3 py-4 border-b border-border/70 flex justify-between items-start flex-col sm:flex-row gap-4">
         <div>
-          <h1 className="text-4xl font-bold text-gray-800">
+          <h1 className="text-4xl font-bold text-foreground">
             Achat vs Location
           </h1>
-          <p className="mt-2 text-xs text-gray-600 max-w-4xl">
+          <p className="mt-2 text-xs text-muted-foreground max-w-4xl">
             En France, on dit souvent qu'acheter est plus intéressant que louer,
             notamment à cause des loyers qui seraient "jeter de l'argent par les
             fenetres". Mais la réalité économique est plus nuancée, comme le
@@ -372,7 +390,7 @@ export function AchatLocation() {
       <div className="mt-4 flex gap-4 flex-col lg:flex-row">
         <div className="flex flex-col gap-4 max-w-[480px] w-full">
           <div className="px-4 w-full">
-            <div className="text-lg font-semibold text-foreground/70">
+            <div className="text-lg font-semibold text-foreground/90">
               Parametres
             </div>
             <p className="text-xs text-muted-foreground mt-1">
@@ -733,7 +751,7 @@ export function AchatLocation() {
 
         <div className="flex flex-col gap-4 border-t lg:border-t-0 pt-4 lg:pt-0 lg:border-l lg:pl-4 border-border/70 flex-1 min-w-0">
           <div className="px-4">
-            <div className="text-lg font-semibold text-foreground/70">
+            <div className="text-lg font-semibold text-foreground/90">
               Simulation
             </div>
             <p className="text-xs text-muted-foreground mt-1">
@@ -1384,6 +1402,52 @@ export function AchatLocation() {
                 </tbody>
               </table>
             </div>
+            <ChartContainer config={chartConfig} className="p-4 h-[420px]">
+              <LineChart
+                accessibilityLayer
+                data={mortgageData.schedule.map((yearData, index) => ({
+                  year: yearData.year,
+                  achat: yearData.capitalTotal,
+                  location:
+                    locationData.locationSchedule[index].capitalTotalLocation,
+                }))}
+                margin={{
+                  left: 12,
+                  right: 12,
+                }}
+              >
+                <CartesianGrid vertical={false} />
+                <XAxis dataKey="year" tickLine={false} tickMargin={8} />
+                <YAxis
+                  tickFormatter={(value) => formatCurrency(value)}
+                  tickLine={false}
+                  tickMargin={8}
+                  width={100}
+                />
+                <ChartTooltip
+                  content={
+                    <ChartTooltipContent
+                      hideLabel
+                      valueFormatter={(value) => formatCurrency(value)}
+                    />
+                  }
+                />
+                <Line
+                  dataKey="achat"
+                  type="monotone"
+                  stroke="var(--color-achat)"
+                  strokeWidth={2}
+                  dot={false}
+                />
+                <Line
+                  dataKey="location"
+                  type="monotone"
+                  stroke="var(--color-location)"
+                  strokeWidth={2}
+                  dot={false}
+                />
+              </LineChart>
+            </ChartContainer>
           </Card>
         </div>
       </div>
