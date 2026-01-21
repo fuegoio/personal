@@ -44,6 +44,33 @@ import {
   useQueryState,
 } from "nuqs";
 
+const DESCRIPTIONS = {
+  achat: {
+    investissement:
+      "L'investissement necéssaire à l'achat d'un bien est égal à l'épargne investie dans le bien plus les coûts liés à l'achat.",
+    couts:
+      "Les coûts de l'achat sont principalement les intérets de l'emprunt, la taxe foncière, les charges et les travaux.",
+    epargne:
+      "Lors d'un achat, ce que l'on épargne c'est ce que l'on rembourse de l'achat du bien, ce qu'on appelle le capital remboursé.",
+    plusvalue:
+      "Un capital (ici le bien) peut générer une plus-value, plus ou moins liquide. Si les prix de l'immobilier augmentent, alors la valeur du bien augmente et il y a une plus-value.",
+    capital:
+      "Dans ce comparatif, ce qui nous intéresse c'est de le capital total (l'épargne totale) dans le cas d'un achat par rapport à celui dans une location.",
+  },
+  location: {
+    investissement:
+      "Pour la location, l'investissement n'est pas calculé mais correspond à celui que l'on aurait mis en achat. Si on a cette capacité d'investissement en achat, on l'a en location aussi.",
+    couts:
+      "Dans le cas locatif, les couts sont uniquement les loyers, ce qui est peut-êtere plus avantageux que l'achat.",
+    epargne:
+      "On part alors du principe que l'on épargne ce qu'on ne dépense pas en loyer.",
+    plusvalue:
+      "Cette épargne peut être placée sur différents supports, qui ont un rendement plus ou moins élevé.",
+    capital:
+      "On peut alors comparer le capital dans le cas d'un achat avec celui dans le cas d'une location, qui peut en fait être plus élevé avant une certaine année !",
+  },
+} as const;
+
 // Location calculation function
 function calculateLocation(
   loyer: number,
@@ -729,6 +756,10 @@ export function AchatLocation() {
                             <span>Investissement</span>
                           </TooltipTrigger>
                           <TooltipContent side="bottom">
+                            <div className="opacity-80">
+                              {DESCRIPTIONS.achat.investissement}
+                            </div>
+                            <div className="border-t mb-2 mt-2 w-full" />
                             Investissement = Coûts + Epargne
                           </TooltipContent>
                         </Tooltip>
@@ -740,6 +771,10 @@ export function AchatLocation() {
                           <span>Coûts</span>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
+                          <div className="opacity-80">
+                            {DESCRIPTIONS.achat.couts}
+                          </div>
+                          <div className="border-t mb-2 mt-2 w-full" />
                           Coûts = Intérêts payés + (Taxe foncière + Charges +
                           Travaux) * Inflation
                         </TooltipContent>
@@ -751,6 +786,10 @@ export function AchatLocation() {
                           <span>Epargne</span>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
+                          <div className="opacity-80">
+                            {DESCRIPTIONS.achat.epargne}
+                          </div>
+                          <div className="border-t mb-2 mt-2 w-full" />
                           Epargne = Capital remboursé
                         </TooltipContent>
                       </Tooltip>
@@ -761,6 +800,10 @@ export function AchatLocation() {
                           <span>Plus-value</span>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
+                          <div className="opacity-80">
+                            {DESCRIPTIONS.achat.plusvalue}
+                          </div>
+                          <div className="border-t mb-2 mt-2 w-full" />
                           Plus-value = Valeur du bien * Taux de plus-value
                         </TooltipContent>
                       </Tooltip>
@@ -771,6 +814,10 @@ export function AchatLocation() {
                           <span>Capital total</span>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
+                          <div className="opacity-80">
+                            {DESCRIPTIONS.achat.capital}
+                          </div>
+                          <div className="border-t mb-2 mt-2 w-full" />
                           Capital total = Capital existant + Capital remboursé +
                           Plus-value
                         </TooltipContent>
@@ -786,6 +833,10 @@ export function AchatLocation() {
                           <span>Investissement</span>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
+                          <div className="opacity-80">
+                            {DESCRIPTIONS.location.investissement}
+                          </div>
+                          <div className="border-t mb-2 mt-2 w-full" />
                           Investissement = Meme investissement que en achat
                         </TooltipContent>
                       </Tooltip>
@@ -796,6 +847,10 @@ export function AchatLocation() {
                           <span>Coûts (loyer)</span>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
+                          <div className="opacity-80">
+                            {DESCRIPTIONS.location.couts}
+                          </div>
+                          <div className="border-t mb-2 mt-2 w-full" />
                           Loyer annuel = Loyer mensuel * 12 * Inflation
                         </TooltipContent>
                       </Tooltip>
@@ -816,6 +871,10 @@ export function AchatLocation() {
                           <span>Plus-value</span>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
+                          <div className="opacity-80">
+                            {DESCRIPTIONS.location.plusvalue}
+                          </div>
+                          <div className="border-t mb-2 mt-2 w-full" />
                           Plus-value = Capital existant * Taux de placement
                         </TooltipContent>
                       </Tooltip>
@@ -826,6 +885,10 @@ export function AchatLocation() {
                           <span>Capital total</span>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
+                          <div className="opacity-80">
+                            {DESCRIPTIONS.location.capital}
+                          </div>
+                          <div className="border-t mb-2 mt-2 w-full" />
                           Capital total = Capital existant + Epargne +
                           Plus-value
                         </TooltipContent>
@@ -854,6 +917,10 @@ export function AchatLocation() {
                           </td>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
+                          <div className="opacity-80">
+                            {DESCRIPTIONS.achat.investissement}
+                          </div>
+                          <div className="border-t mb-2 mt-2 w-full" />
                           Investissement = Coûts + Epargne
                           <div className="border-t mb-6 mt-2 w-full" />
                           <div className="flex items-center justify-between">
@@ -899,6 +966,10 @@ export function AchatLocation() {
                           </td>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
+                          <div className="opacity-80">
+                            {DESCRIPTIONS.achat.couts}
+                          </div>
+                          <div className="border-t mb-2 mt-2 w-full" />
                           Coûts = Intérêts payés + (Taxe foncière + Charges +
                           Travaux) * Inflation
                           <div className="border-t mb-6 mt-2 w-full" />
@@ -970,6 +1041,10 @@ export function AchatLocation() {
                           </td>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
+                          <div className="opacity-80">
+                            {DESCRIPTIONS.achat.epargne}
+                          </div>
+                          <div className="border-t mb-2 mt-2 w-full" />
                           Epargne = Capital remboursé
                           <div className="border-t mb-6 mt-2 w-full" />
                           <div className="font-medium">Emprunt</div>
@@ -1008,6 +1083,10 @@ export function AchatLocation() {
                           </td>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
+                          <div className="opacity-80">
+                            {DESCRIPTIONS.achat.plusvalue}
+                          </div>
+                          <div className="border-t mb-2 mt-2 w-full" />
                           Plus-value = Valeur du bien * Taux de plus-value
                           <div className="border-t mb-6 mt-2 w-full" />
                           <div className="flex items-center justify-between">
@@ -1046,6 +1125,10 @@ export function AchatLocation() {
                           </td>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
+                          <div className="opacity-80">
+                            {DESCRIPTIONS.achat.capital}
+                          </div>
+                          <div className="border-t mb-2 mt-2 w-full" />
                           Capital total = Capital existant + Capital remboursé +
                           Plus-value
                           <div className="border-t mb-6 mt-2 w-full" />
@@ -1090,6 +1173,10 @@ export function AchatLocation() {
                           </td>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
+                          <div className="opacity-80">
+                            {DESCRIPTIONS.location.investissement}
+                          </div>
+                          <div className="border-t mb-2 mt-2 w-full" />
                           Investissement = Meme investissement que en achat
                         </TooltipContent>
                       </Tooltip>
@@ -1102,6 +1189,10 @@ export function AchatLocation() {
                           </td>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
+                          <div className="opacity-80">
+                            {DESCRIPTIONS.location.couts}
+                          </div>
+                          <div className="border-t mb-2 mt-2 w-full" />
                           Loyer annuel = Loyer mensuel * 12 * Inflation
                           <div className="border-t mb-6 mt-2 w-full" />
                           <div className="flex items-center justify-between text-muted-foreground">
@@ -1147,6 +1238,10 @@ export function AchatLocation() {
                           </td>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
+                          <div className="opacity-80">
+                            {DESCRIPTIONS.location.epargne}
+                          </div>
+                          <div className="border-t mb-2 mt-2 w-full" />
                           Epargne = Investissement - Loyer
                           <div className="border-t mb-6 mt-2 w-full" />
                           <div className="flex items-center justify-between">
@@ -1190,6 +1285,10 @@ export function AchatLocation() {
                           </td>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
+                          <div className="opacity-80">
+                            {DESCRIPTIONS.location.plusvalue}
+                          </div>
+                          <div className="border-t mb-2 mt-2 w-full" />
                           Plus-value = Capital existant * Taux de placement
                           <div className="border-t mb-6 mt-2 w-full" />
                           <div className="flex items-center justify-between">
@@ -1235,6 +1334,10 @@ export function AchatLocation() {
                           </td>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
+                          <div className="opacity-80">
+                            {DESCRIPTIONS.location.capital}
+                          </div>
+                          <div className="border-t mb-2 mt-2 w-full" />
                           Capital total = Capital existant + Epargne +
                           Plus-value
                           <div className="border-t mb-6 mt-2 w-full" />
