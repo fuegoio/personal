@@ -1,0 +1,134 @@
+---
+import Separator from "@/components/separator.astro";
+import Layout from "@/layouts/Layout.astro";
+import TopNav from "@/components/top-nav.astro";
+import Button from "@/components/ui/button.astro";
+---
+
+<Layout title="Now">
+  <main class="lg:px-16 px-4 pt-4 space-y-4 pb-20">
+    <TopNav backHref="/" backText="GO HOME" />
+    <Separator class="mt-4" />
+
+    <hgroup class="flex flex-col lg:flex-row lg:items-end lg:gap-12">
+      <h1
+        class="text-[clamp(5rem,10vw,12rem)] leading-none font-semibold font-pixel"
+      >
+        ABOUT ME
+      </h1>
+      <div class="pb-6">
+        <p class="text-base">Who am I and what I do.</p>
+      </div>
+    </hgroup>
+
+    <Separator class="mt-4" />
+
+    <div class="flex gap-8 mt-8">
+      <div class="border-4 border-foreground p-8 flex-1 space-y-4">
+        <h2 class="font-serif text-5xl italic">Who am I</h2>
+        <div class="font-serif text-lg">
+          I'm Alexis Tacnet, a Software engineer, SRE and Designer based in
+          Paris, France. I currently work at <a
+            href="https://mistral.ai"
+            id="mistral"
+            class="font-medium">Mistral AI</a
+          > as a Software Engineer.
+        </div>
+
+        <h3 class="font-serif text-2xl italic mt-16">Software Engineer</h3>
+        <div class="font-serif max-w-xl">
+          I've been programming since I'm 10 and I'm currently 29 years old. I
+          started mainly with Web: HTML, CSS and a bit of early days JS, and
+          then went with C and C++ for Desktop applications. I then switched to
+          Android applications development in Java and published my first app to
+          the Play Store (<i>Android Market</i>) at 15. During my studies, I
+          learned Python and experimented with Data Science / Web. I then went
+          fullspeed towards Web with Python backend and JS front-end: Flask +
+          Angular, Django + Vue, ... Nowadays, I'm mostly programming in
+          Typescript.
+        </div>
+
+        <h3 class="font-serif text-2xl italic mt-16">SRE</h3>
+        <div class="font-serif max-w-xl">
+          As a teenager I discovered Linux with Ubuntu, and then ArchLinux.
+          After a few failed installations and bad formatting of LUKS encrypted
+          LVM partitions, I felt in love with self-hosting and managing unix
+          servers. In my engineer school, I was the president of a student union
+          managing the internet network on the campus. We were managing routers,
+          fibers, ethernet cables and all the associated software: DHCP, DNS,
+          Web hosting,... It was a really great experience that allowed me to
+          work in startups to manage their VPS and soon clouds. After
+          graduating, I cofounded a startup developing a Kubernetes manager to
+          create and manage on-demand environments for web services.
+        </div>
+
+        <h3 class="font-serif text-2xl italic mt-16">Designer</h3>
+        <div class="font-serif max-w-xl">
+          I've always been passionate about design: from classical art to modern
+          web design for Saas applications. I did not study in this field, and I
+          was always frustrated that web developers need to rely on designers to
+          make good products. After a lot of trial in game development on
+          Inkscape when I was younger, I focused on new tools like Figma. I've
+          always tried to make both brand assets and product design for my
+          ideas. Currently, I'm not what I would be a good designer, but I try
+          to improve to be as autonomous as possible to launch my ideas.
+        </div>
+      </div>
+
+      <div class="flex gap-8 flex-col">
+        <div class="border-4 border-foreground/50 p-8 space-y-4">
+          <h2 class="font-serif text-5xl italic">Contact me</h2>
+          <div class="font-serif">
+            You can contact me by sending an email to <a
+              href="mailto:alexistacnet@gmail.com"
+              class="underline underline-offset-2">alexistacnet@gmail.com</a
+            >, I usually respond in a few days.
+          </div>
+        </div>
+
+        <div class="border-4 border-foreground/50 p-8 space-y-4">
+          <h2 class="font-serif text-5xl italic">Where to find me</h2>
+          <div>
+            <div class="font-serif">
+              You can also find me on other websites:
+            </div>
+            <div class="flex space-x-4 flex-1 items-end">
+              <Button
+                variant="link"
+                href="https://github.com/fuegoio"
+                class="p-0"
+                target="_blank"
+              >
+                GitHub
+              </Button>
+              <Button
+                variant="link"
+                href="https://www.linkedin.com/in/alexis-tacnet-aa0478109/"
+                class="p-0"
+                target="_blank"
+              >
+                LinkedIn
+              </Button>
+              <Button
+                variant="link"
+                href="https://x.com/fuegoio"
+                class="p-0"
+                target="_blank"
+              >
+                Twitter
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <style>
+    #mistral {
+      background: linear-gradient(#ffd800, #e10500);
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
+</Layout>
