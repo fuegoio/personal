@@ -18,11 +18,13 @@ import NavButton from "@/components/home/nav-button.astro";
 <Layout>
   <section class="lg:px-16 px-4 pt-12 space-y-4 pb-20">
     <div>
-      <h1 class="text-[clamp(2rem,14vw,12rem)] font-pixel leading-[0.75]">
+      <h1 class="text-[clamp(3rem,10vw,12rem)] font-pixel leading-[0.75]">
         ALEXIS TACNET
       </h1>
       <div class="flex justify-between items-end mt-4">
-        <p class="font-pixel text-4xl">Software engineer, SRE and Designer.</p>
+        <p class="font-pixel text-lg sm:text-2xl lg:text-4xl">
+          Software engineer, SRE and Designer.
+        </p>
         <Button
           variant="ghost"
           size="icon"
@@ -36,9 +38,9 @@ import NavButton from "@/components/home/nav-button.astro";
       <Separator class="mt-4" />
     </div>
 
-    <div class="flex gap-8 py-8">
+    <div class="flex flex-col lg:flex-row gap-8 py-8">
       <div class="space-y-8 flex-1 flex flex-col px-2">
-        <p class="font-medium pt-12">
+        <p class="font-medium lg:pt-12">
           I love to design, code, and deploy stuff.<br /> I currently work at
           <a href="https://mistral.ai" id="mistral" class="font-medium">
             Mistral AI
@@ -102,10 +104,10 @@ import NavButton from "@/components/home/nav-button.astro";
     </div>
 
     <Separator class="h-2" />
-    <div class="flex gap-8 py-8">
+    <div class="flex flex-col lg:flex-row gap-8 py-8">
       <div class="flex-1 space-y-2 px-2">
         <h2 class="font-pixel text-6xl">PROJECTS</h2>
-        <p class="text-sm max-w-120 pl-12 pt-12">
+        <p class="text-sm max-w-120 lg:pl-12 pt-12">
           I've always loved to work on projects on my own. Being able to ship
           something from start to end is something I'm really passionate about.
           A lot of projects did not make it to production, but some of them did.
@@ -134,10 +136,10 @@ import NavButton from "@/components/home/nav-button.astro";
     </div>
 
     <Separator class="h-2 mt-16" />
-    <div class="flex gap-8 py-8">
+    <div class="flex flex-col lg:flex-row gap-8 py-8">
       <div class="flex-1 space-y-2 px-2">
         <h2 class="font-pixel text-6xl">LIBRARIES</h2>
-        <p class="text-sm max-w-120 pl-12 pt-12">
+        <p class="text-sm max-w-120 lg:pl-12 pt-12">
           Helping the community by building open-source libraries is something I
           enjoy a lot. I try to build libraries that are useful and easy to use.
         </p>
@@ -163,10 +165,10 @@ import NavButton from "@/components/home/nav-button.astro";
     </div>
 
     <Separator class="h-2 mt-16" />
-    <div class="flex gap-8 py-8">
+    <div class="flex flex-col lg:flex-row gap-8 py-8">
       <div class="flex-1 space-y-2 px-2">
         <h2 class="font-pixel text-6xl">FINANCE</h2>
-        <p class="text-sm max-w-120 pl-12 pt-4">
+        <p class="text-sm max-w-120 lg:pl-12 pt-4">
           I'm also passionate about finance and economics. I built some tools to
           help me understand the world better.
         </p>
