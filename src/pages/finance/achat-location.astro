@@ -10,9 +10,8 @@ const description =
 ---
 
 <Layout lang="fr" title="Achat vs Location" description={description}>
-  <div class="px-4 pt-2">
-    <TopNav backHref="/" backText="GO HOME" />
-    <Separator class="h-0.5 bg-muted-foreground" />
+  <div class="px-5 pt-2">
+    <TopNav backHref="/" backText="GO HOME" hideHome />
   </div>
   <AchatLocationPage client:load />
 </Layout>

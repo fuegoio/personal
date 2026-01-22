@@ -352,7 +352,7 @@ export function AchatLocation() {
   );
 
   return (
-    <div className="p-4">
+    <div className="px-4 pb-4">
       <div className="px-3 py-4 border-b border-border/70 flex justify-between items-start flex-col sm:flex-row gap-4">
         <div>
           <h1 className="text-4xl font-bold text-foreground">

@@ -3,19 +3,25 @@ import ThemeSelector from "@/components/theme-selector.astro";
 import Button from "@/components/ui/button.astro";
 import { ArrowLeft } from "@lucide/astro";
 import HomeButton from "@/components/home-button.astro";
+import { cn } from "@/lib/utils";
 
-const { backHref, backText } = Astro.props;
+const { backHref, backText, hideHome } = Astro.props;
 ---
 
 <HomeButton class="sm:hidden" />
-<nav class="grid grid-cols-2 sm:grid-cols-3 items-center">
+<nav
+  class={cn(
+    "grid items-center",
+    hideHome ? "grid-cols-2" : "grid-cols-2 sm:grid-cols-3",
+  )}
+>
   <div>
     <Button href={backHref} variant="link" as="a">
       <ArrowLeft class="h-4 w-4" />
       {backText}
     </Button>
   </div>
-  <HomeButton class="hidden sm:block" />
+  {!hideHome && <HomeButton class="hidden sm:block" />}
   <div class="flex justify-end">
     <ThemeSelector />
   </div>
