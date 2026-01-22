@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import Separator from "@/components/separator.astro";
+import TopNav from "@/components/top-nav.astro";
 
 const posts = (await getCollection("blog")).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
@@ -9,27 +10,28 @@ const posts = (await getCollection("blog")).sort(
 ---
 
 <Layout title="Blog">
-  <main class="max-w-2xl mx-auto px-4 pt-16 space-y-8 pb-20">
-    <div>
-      <div class="flex items-center gap-2 justify-between">
-        <a
-          href="/blog"
-          class="inline-flex items-center gap-2 text-gray-600 hover:text-gray-800 transition-colors"
-        >
-          Blog
-        </a>
-        <a href="/" class="font-semibold text-lg">Alexis Tacnet</a>
-      </div>
-      <Separator />
-    </div>
+  <section class="lg:px-16 px-4 pt-4 space-y-4 pb-20">
+    <TopNav backHref="/" backText="GO HOME" />
+    <Separator class="mt-4" />
 
-    <ul>
+    <hgroup class="flex flex-col lg:flex-row items-baseline lg:gap-12">
+      <h1 class="text-[clamp(5rem,10vw,12rem)] font-serif leading-none">
+        BLOG
+      </h1>
+      <p class="font-serif text-lg">
+        I write about software engineering, design and more.
+      </p>
+    </hgroup>
+
+    <Separator class="mt-4" />
+
+    <ul class="px-2 py-8 space-y-6 lg:space-y-4">
       {
         posts.map((post) => (
-          <li class="h-10">
+          <li>
             <a
               href={`/blog/${post.id}/`}
-              class="flex items-center justify-between text-gray-800 hover:text-gray-500 transition-colors"
+              class="flex flex-col-reverse lg:flex-row lg:items-center justify-between transition-colors text-foreground hover:text-foreground/80 font-serif text-xl"
             >
               {post.data.title}
 
@@ -45,5 +47,5 @@ const posts = (await getCollection("blog")).sort(
         ))
       }
     </ul>
-  </main>
+  </section>
 </Layout>

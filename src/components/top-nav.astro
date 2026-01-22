@@ -1,0 +1,22 @@
+---
+import ThemeSelector from "@/components/theme-selector.astro";
+import Button from "@/components/ui/button.astro";
+import { ArrowLeft } from "@lucide/astro";
+import HomeButton from "@/components/home-button.astro";
+
+const { backHref, backText } = Astro.props;
+---
+
+<HomeButton class="sm:hidden" />
+<div class="grid grid-cols-2 sm:grid-cols-3 items-center">
+  <div>
+    <Button href={backHref} variant="link" as="a">
+      <ArrowLeft class="h-4 w-4" />
+      {backText}
+    </Button>
+  </div>
+  <HomeButton class="hidden sm:block" />
+  <div class="flex justify-end">
+    <ThemeSelector />
+  </div>
+</div>
