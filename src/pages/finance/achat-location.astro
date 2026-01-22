@@ -2,11 +2,17 @@
 import Layout from "@/layouts/Layout.astro";
 
 import { AchatLocationPage } from "@/components/react/achat-location-page.tsx";
+import TopNav from "@/components/top-nav.astro";
+import Separator from "@/components/separator.astro";
 
 const description =
   "En France, on dit souvent qu'acheter est plus intéressant que louer, notamment à cause des loyers qui seraient \"jeter de l'argent par les fenetres\". Mais la réalité économique est plus nuancée, comme le montre ce comparatif.";
 ---
 
 <Layout lang="fr" title="Achat vs Location" description={description}>
+  <div class="px-4 pt-2">
+    <TopNav backHref="/" backText="GO HOME" />
+    <Separator class="h-0.5 bg-muted-foreground" />
+  </div>
   <AchatLocationPage client:load />
 </Layout>
