@@ -10,7 +10,7 @@ const posts = (await getCollection("blog")).sort(
 ---
 
 <Layout title="Blog">
-  <section class="lg:px-16 px-4 pt-4 space-y-4 pb-20">
+  <main class="lg:px-16 px-4 pt-4 space-y-4 pb-20">
     <TopNav backHref="/" backText="GO HOME" />
     <Separator class="mt-4" />
 
@@ -47,5 +47,5 @@ const posts = (await getCollection("blog")).sort(
         ))
       }
     </ul>
-  </section>
+  </main>
 </Layout>

@@ -16,7 +16,7 @@ import ThemeSelector from "@/components/theme-selector.astro";
 ---
 
 <Layout>
-  <section class="lg:px-16 px-4 pt-12 space-y-4 pb-20">
+  <main class="lg:px-16 px-4 pt-12 space-y-4 pb-20">
     <div>
       <div class="overflow-hidden">
         <h1
@@ -96,7 +96,10 @@ import ThemeSelector from "@/components/theme-selector.astro";
           src={art}
           alt="art image"
           class="border-4 border-foreground rounded object-cover max-w-full"
+          width="800"
+          height="560"
           layout="constrained"
+          priority
         />
       </div>
     </div>
@@ -181,7 +184,7 @@ import ThemeSelector from "@/components/theme-selector.astro";
         />
       </div>
     </div>
-  </section>
+  </main>
 </Layout>
 
 <style>
