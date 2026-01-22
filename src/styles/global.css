@@ -21,6 +21,11 @@
 }
 
 @custom-variant dark (&:is(.dark *));
+@custom-variant prose-inline-code {
+  :where(:not(pre) > code):not(:where([class~="not-prose"] *)) {
+    @slot;
+  }
+}
 
 :root {
   --background: oklch(0.9851 0 0);

@@ -41,7 +41,7 @@ const { Content } = await render(post);
       <Separator />
     </div>
 
-    <div class="pt-16 pb-4">
+    <div class="pt-16 pb-4 font-serif">
       <p class="text-gray-400">
         {
           post.data.pubDate.toLocaleDateString("en-US", {
@@ -51,10 +51,12 @@ const { Content } = await render(post);
           })
         }
       </p>
-      <h1 class="text-4xl/snug font-bold mt-1">{post.data.title}</h1>
+      <h1 class="text-5xl/snug font-bold mt-1">{post.data.title}</h1>
     </div>
 
-    <div class="prose w-full max-w-none pb-20">
+    <div
+      class="prose-lg w-full max-w-none pb-20 font-serif prose-inline-code:bg-muted prose-inline-code:px-2 prose-inline-code:text-muted-foreground"
+    >
       <Content />
     </div>
   </main>
