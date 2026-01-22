@@ -7,101 +7,175 @@ import Library from "../components/library.astro";
 import tracktrip from "../assets/tracktrip.png";
 import mots from "../assets/mots.png";
 import Tool from "@/components/tool.astro";
+import { ArrowRight, Moon } from "@lucide/astro";
+
+import { Image } from "astro:assets";
+import art from "../assets/art.png";
+import Button from "@/components/ui/button.astro";
+import NavButton from "@/components/home/nav-button.astro";
 ---
 
 <Layout>
-  <main class="max-w-2xl mx-auto px-4 pt-16 space-y-8 pb-20">
+  <section class="lg:px-16 px-4 pt-12 space-y-4 pb-20">
     <div>
-      <div class="flex items-center gap-2 justify-between">
-        <h1 class="font-semibold text-lg">Alexis Tacnet</h1>
-        <a
-          href="/blog"
-          class="inline-flex items-center gap-2 text-gray-600 hover:text-gray-800 transition-colors"
-        >
-          Blog
-        </a>
+      <h1 class="text-[clamp(2rem,14vw,12rem)] font-pixel leading-[0.75]">
+        ALEXIS TACNET
+      </h1>
+      <div class="flex justify-between items-end mt-4">
+        <p class="font-pixel text-4xl">Software engineer, SRE and Designer.</p>
+        <Button variant="ghost" size="icon">
+          <Moon class="size-7" />
+        </Button>
       </div>
-      <Separator />
+      <Separator class="mt-4" />
     </div>
 
-    <p class="text-sm">
-      Software engineer, SRE and Designer. I love to design, code, and deploy
-      stuff.
-    </p>
-    <p class="text-sm">
-      I currently work at
-      <a href="https://mistral.ai" id="mistral" class="font-medium">
-        Mistral AI
-      </a>
-      in Paris.
-    </p>
+    <div class="flex gap-8 py-8">
+      <div class="space-y-8 flex-1 flex flex-col px-2">
+        <p class="font-medium pt-12">
+          I love to design, code, and deploy stuff.<br /> I currently work at
+          <a href="https://mistral.ai" id="mistral" class="font-medium">
+            Mistral AI
+          </a>
+          in Paris.
+        </p>
 
-    <div class="flex space-x-4 mt-16">
-      <a href="https://github.com/fuegoio" class="text-sm" target="_blank">
-        GitHub
-      </a>
-      <a
-        href="https://www.linkedin.com/in/alexis-tacnet-aa0478109/"
-        class="text-sm"
-        target="_blank"
-      >
-        LinkedIn
-      </a>
-      <a href="https://x.com/fuegoio" class="text-sm" target="_blank">
-        Twitter
-      </a>
+        <div class="mt-8">
+          <NavButton
+            href="/blog"
+            title="Blog"
+            desc="I write about software engineering, design and more."
+          />
+          <!-- <NavButton -->
+          <!--   href="/projects" -->
+          <!--   title="Projects" -->
+          <!--   desc="Discover the projects I built." -->
+          <!-- /> -->
+          <!-- <NavButton href="/about" title="About" desc="Learn more about me." /> -->
+          <!-- <NavButton -->
+          <!--   href="/now" -->
+          <!--   title="Now" -->
+          <!--   desc="What I am doing right now." -->
+          <!-- /> -->
+        </div>
+
+        <div class="flex space-x-4 pt-16 flex-1 items-end">
+          <Button
+            variant="link"
+            href="https://github.com/fuegoio"
+            class="p-0"
+            target="_blank"
+          >
+            GitHub
+          </Button>
+          <Button
+            variant="link"
+            href="https://www.linkedin.com/in/alexis-tacnet-aa0478109/"
+            class="p-0"
+            target="_blank"
+          >
+            LinkedIn
+          </Button>
+          <Button
+            variant="link"
+            href="https://x.com/fuegoio"
+            class="p-0"
+            target="_blank"
+          >
+            Twitter
+          </Button>
+        </div>
+      </div>
+      <div class="flex flex-1 justify-end">
+        <Image
+          src={art}
+          alt="art image"
+          class="border-4 border-foreground rounded"
+        />
+      </div>
     </div>
 
     <Separator class="h-2" />
-    <div class="font-semibold">My projects</div>
+    <div class="flex gap-8 py-8">
+      <div class="flex-1 space-y-2 px-2">
+        <h2 class="font-pixel text-6xl">PROJECTS</h2>
+        <p class="text-sm max-w-120 pl-12 pt-12">
+          I've always loved to work on projects on my own. Being able to ship
+          something from start to end is something I'm really passionate about.
+          A lot of projects did not make it to production, but some of them did.
+        </p>
+      </div>
 
-    <Project
-      name="Tracktrip"
-      url="https://tracktrip.app"
-      githubUrl="https://github.com/fuegoio/tracktrip"
-      year="2025"
-      description="Open-source expense tracker for travelers."
-      imageSrc={tracktrip}
-    />
+      <div class="flex-1 space-y-4">
+        <Project
+          name="Tracktrip"
+          url="https://tracktrip.app"
+          githubUrl="https://github.com/fuegoio/tracktrip"
+          year="2025"
+          description="Open-source expense tracker for travelers."
+          imageSrc={tracktrip}
+        />
 
-    <Project
-      name="Mots"
-      url="https://mots.alexistac.net"
-      githubUrl="https://github.com/fuegoio/mots"
-      year="2022"
-      description="A portable dictionary to learn new words."
-      imageSrc={mots}
-    />
-
-    <Separator class="h-2 mt-16" />
-    <div class="font-semibold">My libraries</div>
-
-    <Library
-      name="trpc-monitoring-middleware"
-      url="https://www.npmjs.com/package/trpc-monitoring-middleware"
-      githubUrl="https://github.com/fuegoio/trpc-monitoring-middleware"
-      year="2026"
-      description="tRPC middleware to automatically add OTel and Logging of all procedures."
-    />
-
-    <Library
-      name="trpc-db-collection"
-      url="https://www.npmjs.com/package/trpc-db-collection"
-      githubUrl="https://github.com/fuegoio/trpc-db-collection"
-      year="2025"
-      description="tRPC collection for TanStack DB, enabling real time sync."
-    />
+        <Project
+          name="Mots"
+          url="https://mots.alexistac.net"
+          githubUrl="https://github.com/fuegoio/mots"
+          year="2022"
+          description="A portable dictionary to learn new words."
+          imageSrc={mots}
+        />
+      </div>
+    </div>
 
     <Separator class="h-2 mt-16" />
-    <div class="font-semibold">Financial tools</div>
+    <div class="flex gap-8 py-8">
+      <div class="flex-1 space-y-2 px-2">
+        <h2 class="font-pixel text-6xl">LIBRARIES</h2>
+        <p class="text-sm max-w-120 pl-12 pt-12">
+          Helping the community by building open-source libraries is something I
+          enjoy a lot. I try to build libraries that are useful and easy to use.
+        </p>
+      </div>
 
-    <Tool
-      name="Buy vs rent"
-      url="/finance/achat-location"
-      year="2026"
-      description="In France, it is commonly admitted that renting a house is loosing a lot of money, but it's not always true. This is a tool to compare the cost of buying vs renting a house."
-    />
-  </main>
+      <div class="flex-1 space-y-4">
+        <Library
+          name="trpc-monitoring-middleware"
+          url="https://www.npmjs.com/package/trpc-monitoring-middleware"
+          githubUrl="https://github.com/fuegoio/trpc-monitoring-middleware"
+          year="2026"
+          description="tRPC middleware to automatically add OTel and Logging of all procedures."
+        />
+
+        <Library
+          name="trpc-db-collection"
+          url="https://www.npmjs.com/package/trpc-db-collection"
+          githubUrl="https://github.com/fuegoio/trpc-db-collection"
+          year="2025"
+          description="tRPC collection for TanStack DB, enabling real time sync."
+        />
+      </div>
+    </div>
+
+    <Separator class="h-2 mt-16" />
+    <div class="flex gap-8 py-8">
+      <div class="flex-1 space-y-2 px-2">
+        <h2 class="font-pixel text-6xl">FINANCE</h2>
+        <p class="text-sm max-w-120 pl-12 pt-4">
+          I'm also passionate about finance and economics. I built some tools to
+          help me understand the world better.
+        </p>
+      </div>
+
+      <div class="flex-1 space-y-4">
+        <Tool
+          name="Buy vs rent"
+          url="/finance/achat-location"
+          year="2026"
+          description="In France, it is commonly admitted that renting a house is loosing a lot of money, but it's not always true. This is a tool to compare the cost of buying vs renting a house."
+        />
+      </div>
+    </div>
+  </section>
 </Layout>
 
 <style>

@@ -92,7 +92,9 @@
 }
 
 @theme inline {
+  --font-pixel: "Tiny5", monospace;
   --font-mono: "iA Writer Mono", monospace;
+  --font-serif: "EB Garamond", serif;
 
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);

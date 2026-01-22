@@ -1,0 +1,17 @@
+---
+import { ArrowRight } from "@lucide/astro";
+
+const { href, title, desc } = Astro.props;
+---
+
+<a href={href} class="flex group items-center gap-2 text-sm py-2">
+  <span class="font-medium group-hover:underline underline-offset-4">
+    {title}
+  </span>
+  <ArrowRight class="w-4 h-4" />
+  <span
+    class="text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity"
+  >
+    {desc}
+  </span>
+</a>
