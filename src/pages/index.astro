@@ -18,11 +18,15 @@ import ThemeSelector from "@/components/theme-selector.astro";
 <Layout>
   <section class="lg:px-16 px-4 pt-12 space-y-4 pb-20">
     <div>
-      <h1 class="text-[clamp(3rem,10vw,12rem)] font-pixel leading-[0.75]">
-        ALEXIS TACNET
-      </h1>
-      <div class="flex justify-between items-end mt-4">
-        <p class="font-pixel text-lg sm:text-2xl lg:text-4xl">
+      <div class="overflow-hidden">
+        <h1
+          class="text-[clamp(3rem,10vw,12rem)] font-pixel leading-[0.75] title-animation"
+        >
+          ALEXIS TACNET
+        </h1>
+      </div>
+      <div class="flex justify-between items-end mt-4 overflow-hidden">
+        <p class="font-pixel text-lg sm:text-2xl lg:text-4xl title-animation">
           Software engineer, SRE and Designer.
         </p>
         <ThemeSelector />
@@ -184,5 +188,18 @@ import ThemeSelector from "@/components/theme-selector.astro";
     background: linear-gradient(#ffd800, #e10500);
     background-clip: text;
     -webkit-text-fill-color: transparent;
+  }
+
+  @keyframes title-animation {
+    0% {
+      transform: translateY(-100%);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  .title-animation {
+    animation: title-animation 400ms ease-in-out;
   }
 </style>
