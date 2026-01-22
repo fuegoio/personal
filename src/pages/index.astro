@@ -10,6 +10,7 @@ import Tool from "@/components/tool.astro";
 
 import { Image } from "astro:assets";
 import art from "../assets/art.png";
+import art2 from "../assets/art.2.png";
 import Button from "@/components/ui/button.astro";
 import NavButton from "@/components/home/nav-button.astro";
 import ThemeSelector from "@/components/theme-selector.astro";
@@ -109,16 +110,26 @@ import ThemeSelector from "@/components/theme-selector.astro";
           </Button>
         </div>
       </div>
-      <div class="flex flex-1 justify-end">
-        <Image
-          src={art}
-          alt="art image"
-          class="border-4 border-foreground rounded object-cover max-w-full"
-          width="800"
-          height="560"
-          layout="constrained"
-          priority
-        />
+      <div class="flex flex-1 justify-end group">
+        <div class="border-4 border-foreground rounded relative">
+          <Image
+            src={art}
+            alt="art image"
+            class="object-cover"
+            width="800"
+            height="560"
+            layout="constrained"
+            priority
+          />
+          <Image
+            src={art2}
+            alt="art image"
+            class="object-cover absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 top-0 left-0"
+            width="800"
+            height="560"
+            layout="constrained"
+          />
+        </div>
       </div>
     </div>
 
