@@ -1,5 +1,6 @@
 ---
 import "@/styles/global.css";
+import StarCanvas from "@/components/star-canvas.astro";
 
 interface Props {
   lang?: string;
@@ -133,6 +134,9 @@ if (title) {
     />
   </head>
   <body>
-    <slot />
+    <StarCanvas />
+    <div class="relative z-10">
+      <slot />
+    </div>
   </body>
 </html>
