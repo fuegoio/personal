@@ -192,7 +192,7 @@
   gl.enable(gl.BLEND);
   gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
-  const GRAIN_SPEED = 4; // radians/sec — lower = slower drift
+  const GRAIN_SPEED = 10; // radians/sec — lower = slower drift
 
   function render(t: number) {
     gl.clearColor(0, 0, 0, 0);
