@@ -22,6 +22,8 @@
   "home.finance.desc": "Je suis également passionné par la finance et l'économie. J'ai créé quelques outils pour mieux comprendre le monde.",
   "project.tracktrip.desc": "Gestionnaire de dépenses open-source pour les voyageurs.",
   "project.mots.desc": "Un dictionnaire portable pour apprendre de nouveaux mots.",
+  "project.gitradar.desc": "Découvrir des repos Github intéressants basés sur ses préférences.",
+  "project.maille.desc": "Outil compliqué de gestion de finance personnelle pour les ingénieurs.",
   "library.trpc-monitoring.desc": "Middleware tRPC pour ajouter automatiquement OTel et la journalisation de toutes les procédures.",
   "library.trpc-db.desc": "Collection tRPC pour TanStack DB, permettant la synchronisation en temps réel.",
   "tool.buyvsrent.name": "Achat vs Location",

@@ -7,6 +7,8 @@ import T from "../components/T.astro";
 
 import tracktrip from "../assets/tracktrip.png";
 import mots from "../assets/mots.png";
+import maille from "../assets/maille.png";
+import gitradar from "../assets/gitradar.png";
 import Tool from "@/components/tool.astro";
 
 import { Image } from "astro:assets";
@@ -81,6 +83,8 @@ import LangSelector from "@/components/lang-selector.astro";
         <T key="home.projects.desc" tag="p" class="text-sm max-w-120 lg:pl-12 pt-12" />
       </div>
       <div class="flex-1 space-y-4">
+        <Project name="Gitradar" url="https://gitradar.dev" githubUrl="https://github.com/fuegoio/gitradar" year="2026" descriptionKey="project.gitradar.desc" imageSrc={gitradar} />
+        <Project name="Maille" url="https://maille.alexistac.net" githubUrl="https://github.com/fuegoio/maille" year="2026" descriptionKey="project.maille.desc" imageSrc={maille} />
         <Project name="Tracktrip" url="https://tracktrip.app" githubUrl="https://github.com/fuegoio/tracktrip" year="2025" descriptionKey="project.tracktrip.desc" imageSrc={tracktrip} />
         <Project name="Mots" url="https://mots.alexistac.net" githubUrl="https://github.com/fuegoio/mots" year="2022" descriptionKey="project.mots.desc" imageSrc={mots} />
       </div>
