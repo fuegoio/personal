@@ -1,0 +1,28 @@
+---
+import Button from "@/components/ui/button.astro";
+import { cn } from "@/lib/utils";
+
+const { class: className } = Astro.props;
+---
+
+<Button
+  id="lang-toggle"
+  variant="ghost"
+  size="icon"
+  aria-label="Toggle language"
+  class={cn("rounded-full font-pixel text-xs w-9 h-9", className)}
+>
+  <span data-lang-current>EN</span>
+</Button>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.getElementById("lang-toggle");
+    btn?.addEventListener("click", () => {
+      const i18n = (window as any).__i18n;
+      if (!i18n) return;
+      const next = i18n.getCurrentLang() === "en" ? "fr" : "en";
+      i18n.setLang(next);
+    });
+  });
+</script>

@@ -1,0 +1,60 @@
+---
+/**
+ * T — Translation component with slot interpolation.
+ *
+ * Usage (plain string, no tokens):
+ *   <T key="home.tagline" />
+ *   <T key="home.tagline" tag="p" class="text-base" />
+ *
+ * Usage (with {token} placeholders):
+ *   <T key="about.whoami.body" slots={{ company: '<a href="...">Mistral AI</a>' }} />
+ *
+ * The rendered HTML structure is:
+ *   <span data-i18n="key">
+ *     text before...
+ *     <span data-i18n-slot="token">...slot html...</span>
+ *     ...text after
+ *   </span>
+ *
+ * On the client, applyToElement() re-splits the new string on {token} and
+ * reorders the text nodes + slot elements without touching the slot elements.
+ *
+ * SSR always renders English. The client i18n script applies the user's lang.
+ */
+import { t } from "@/i18n/index";
+
+interface Props {
+  key: string;
+  slots?: Record<string, string>;
+  tag?: string;
+  class?: string;
+}
+
+const { key, slots = {}, tag: Tag = "span", class: className } = Astro.props;
+const raw = t(key);
+
+// Split on {token} placeholders
+const TOKEN_RE = /\{(\w+)\}/g;
+const parts: Array<{ type: "text"; value: string } | { type: "slot"; name: string }> = [];
+let lastIndex = 0;
+let match: RegExpExecArray | null;
+
+while ((match = TOKEN_RE.exec(raw)) !== null) {
+  if (match.index > lastIndex) {
+    parts.push({ type: "text", value: raw.slice(lastIndex, match.index) });
+  }
+  parts.push({ type: "slot", name: match[1] });
+  lastIndex = match.index + match[0].length;
+}
+if (lastIndex < raw.length) {
+  parts.push({ type: "text", value: raw.slice(lastIndex) });
+}
+---
+
+<Tag data-i18n={key} class={className}>{
+  parts.map((part) =>
+    part.type === "text"
+      ? part.value
+      : <span data-i18n-slot={part.name} set:html={slots[part.name] ?? ""} />
+  )
+}</Tag>

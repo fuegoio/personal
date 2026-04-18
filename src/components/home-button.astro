@@ -1,22 +1,15 @@
 ---
 import { cn } from "@/lib/utils";
+import T from "@/components/T.astro";
+
+interface Props {
+  class?: string;
+}
 
 const { class: className } = Astro.props;
 ---
 
-<a
-  href="/"
-  class={cn(
-    "font-pixel text-xl text-center group overflow-hidden h-lh block",
-    className,
-  )}
->
-  <div
-    class="group-hover:-translate-y-full transition-transform duration-300 text-foreground/70"
-  >
-    Personal website of Alexis Tacnet
-  </div>
-  <div class="group-hover:-translate-y-full transition-transform duration-300">
-    GO HOME
-  </div>
+<a href="/" class={cn("font-pixel text-xl text-center group overflow-hidden h-lh block", className)}>
+  <T key="homebutton.label" class="group-hover:-translate-y-full transition-transform duration-300 text-foreground/70 block" />
+  <T key="homebutton.cta" class="group-hover:-translate-y-full transition-transform duration-300 block" />
 </a>

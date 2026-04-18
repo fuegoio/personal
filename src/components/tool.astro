@@ -1,22 +1,22 @@
 ---
+import T from "@/components/T.astro";
+
 interface Props {
-  name: string;
   url: string;
   year: string;
-  description: string;
+  nameKey: string;
+  descriptionKey: string;
 }
 
-const { name, url, year, description } = Astro.props;
+const { url, year, nameKey, descriptionKey } = Astro.props;
 ---
 
 <div class="border bg-card">
   <div class="p-4">
     <div class="flex items-center gap-4">
-      <a class="font-semibold flex-1" href={url}>
-        {name}
-      </a>
+      <a href={url} class="font-semibold flex-1"><T key={nameKey} /></a>
       <div class="text-gray-500 text-sm">{year}</div>
     </div>
-    <div class="text-sm">{description}</div>
+    <T key={descriptionKey} class="text-sm" />
   </div>
 </div>

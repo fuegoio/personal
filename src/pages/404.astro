@@ -1,6 +1,10 @@
 ---
 import "@/styles/global.css";
 import { ArrowRight } from "@lucide/astro";
+import { locales } from "@/i18n/index";
+import T from "@/components/T.astro";
+
+const localesJson = JSON.stringify(locales);
 ---
 
 <!doctype html>
@@ -14,51 +18,35 @@ import { ArrowRight } from "@lucide/astro";
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="192x192"
-      href="/favicon-192x192.png"
-    />
-    <link
-      rel="apple-touch-icon"
-      type="image/png"
-      sizes="180x180"
-      href="/favicon-180x180.png"
-    />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
+    <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="/favicon-180x180.png" />
 
     <title>404 — Alexis Tacnet</title>
+
+    <script is:inline define:vars={{ localesJson }}>
+      window.__I18N_LOCALES = JSON.parse(localesJson);
+    </script>
+    <script src="@/scripts/i18n.ts"></script>
 
     <!-- Preconnect -->
     <link rel="preconnect" href="https://umami.alexistac.net" />
 
-    {
-      import.meta.env.PROD && (
-        <script
-          defer
-          src="https://umami.alexistac.net/script.js"
-          data-website-id="c96e63cf-c538-41fb-a6d3-5a0fd4bfa972"
-        />
-      )
-    }
+    {import.meta.env.PROD && (
+      <script defer src="https://umami.alexistac.net/script.js" data-website-id="c96e63cf-c538-41fb-a6d3-5a0fd4bfa972" />
+    )}
   </head>
   <body>
     <div class="flex flex-col items-center justify-center h-full w-full">
       <p class="text-7xl font-bold text-foreground">404</p>
-      <p class="text-xl text-subtle-foreground">This page can't be found</p>
+      <T key="404.notFound" tag="p" class="text-xl text-subtle-foreground" />
       <a class="mt-8 inline-flex items-center gap-2" href="/">
-        Go home
+        <T key="404.goHome" />
         <ArrowRight class="h-4 w-4" />
       </a>
     </div>
 
     <style>
-      html,
-      body {
-        margin: 0;
-        width: 100%;
-        height: 100%;
-      }
+      html, body { margin: 0; width: 100%; height: 100%; }
     </style>
   </body>
 </html>

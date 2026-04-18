@@ -1,28 +1,33 @@
 ---
 import ThemeSelector from "@/components/theme-selector.astro";
+import LangSelector from "@/components/lang-selector.astro";
 import Button from "@/components/ui/button.astro";
 import { ArrowLeft } from "@lucide/astro";
 import HomeButton from "@/components/home-button.astro";
+import T from "@/components/T.astro";
 import { cn } from "@/lib/utils";
 
-const { backHref, backText, hideHome } = Astro.props;
+interface Props {
+  backHref: string;
+  backTextKey: string;
+  hideHome?: boolean;
+  class?: string;
+}
+
+const { backHref, backTextKey, hideHome, class: className } = Astro.props;
 ---
 
 <HomeButton class="sm:hidden" />
-<nav
-  class={cn(
-    "grid items-center",
-    hideHome ? "grid-cols-2" : "grid-cols-2 sm:grid-cols-3",
-  )}
->
+<nav class={cn("grid items-center", hideHome ? "grid-cols-2" : "grid-cols-2 sm:grid-cols-3", className)}>
   <div>
     <Button href={backHref} variant="link" as="a">
       <ArrowLeft class="h-4 w-4" />
-      {backText}
+      <T key={backTextKey} />
     </Button>
   </div>
   {!hideHome && <HomeButton class="hidden sm:block" />}
-  <div class="flex justify-end">
+  <div class="flex justify-end items-center gap-1">
+    <LangSelector />
     <ThemeSelector />
   </div>
 </nav>

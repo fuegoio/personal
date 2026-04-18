@@ -3,7 +3,6 @@ import Separator from "@/components/separator.astro";
 import Layout from "@/layouts/Layout.astro";
 import { getCollection, render } from "astro:content";
 import TopNav from "@/components/top-nav.astro";
-
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
   return posts.map((post) => ({
@@ -27,18 +26,16 @@ const { Content } = await render(post);
   }}
 >
   <main class="lg:px-16 px-4 pt-4 space-y-4 pb-20">
-    <TopNav backHref="/blog/" backText="BACK TO ARTICLES" />
+    <TopNav backHref="/blog/" backTextKey="nav.backToArticles" />
     <Separator class="mt-4" />
 
     <div class="pt-8 pb-4 font-serif">
       <p class="text-gray-400">
-        {
-          post.data.pubDate.toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })
-        }
+        {post.data.pubDate.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        })}
       </p>
       <h1 class="text-5xl/snug lg:text-7xl/snug font-bold mt-1 leading-none">
         {post.data.title}
@@ -46,9 +43,7 @@ const { Content } = await render(post);
     </div>
     <Separator />
 
-    <div
-      class="max-w-xl prose-lg w-full mx-auto mt-8 pb-20 font-serif prose-inline-code:bg-muted prose-inline-code:px-2 prose-inline-code:text-muted-foreground"
-    >
+    <div class="max-w-xl prose-lg w-full mx-auto mt-8 pb-20 font-serif prose-inline-code:bg-muted prose-inline-code:px-2 prose-inline-code:text-muted-foreground">
       <Content />
     </div>
   </main>

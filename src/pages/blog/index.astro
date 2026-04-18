@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import Separator from "@/components/separator.astro";
 import TopNav from "@/components/top-nav.astro";
+import T from "@/components/T.astro";
 
 const posts = (await getCollection("blog")).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
@@ -11,41 +12,34 @@ const posts = (await getCollection("blog")).sort(
 
 <Layout title="Blog">
   <main class="lg:px-16 px-4 pt-4 space-y-4 pb-20">
-    <TopNav backHref="/" backText="GO HOME" />
+    <TopNav backHref="/" backTextKey="nav.goHome" />
     <Separator class="mt-4" />
 
     <hgroup class="flex flex-col lg:flex-row items-baseline lg:gap-12">
-      <h1 class="text-[clamp(5rem,10vw,12rem)] font-serif leading-none">
-        BLOG
-      </h1>
-      <p class="font-serif text-lg">
-        I write about software engineering, design and more.
-      </p>
+      <h1 class="text-[clamp(5rem,10vw,12rem)] font-serif leading-none">BLOG</h1>
+      <T key="blog.subtitle" tag="p" class="font-serif text-lg" />
     </hgroup>
 
     <Separator class="mt-4" />
 
     <ul class="px-2 py-8 space-y-6 lg:space-y-4">
-      {
-        posts.map((post) => (
-          <li>
-            <a
-              href={`/blog/${post.id}/`}
-              class="flex flex-col-reverse lg:flex-row lg:items-center justify-between transition-colors text-foreground hover:text-foreground/80 font-serif text-xl"
-            >
-              {post.data.title}
-
-              <span class="text-gray-400">
-                {post.data.pubDate.toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </span>
-            </a>
-          </li>
-        ))
-      }
+      {posts.map((post) => (
+        <li>
+          <a
+            href={`/blog/${post.id}/`}
+            class="flex flex-col-reverse lg:flex-row lg:items-center justify-between transition-colors text-foreground hover:text-foreground/80 font-serif text-xl"
+          >
+            {post.data.title}
+            <span class="text-gray-400">
+              {post.data.pubDate.toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </span>
+          </a>
+        </li>
+      ))}
     </ul>
   </main>
 </Layout>

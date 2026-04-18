@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import Separator from "../components/separator.astro";
 import Project from "../components/project.astro";
 import Library from "../components/library.astro";
+import T from "../components/T.astro";
 
 import tracktrip from "../assets/tracktrip.png";
 import mots from "../assets/mots.png";
@@ -14,41 +15,33 @@ import art2 from "../assets/art.2.png";
 import Button from "@/components/ui/button.astro";
 import NavButton from "@/components/home/nav-button.astro";
 import ThemeSelector from "@/components/theme-selector.astro";
+import LangSelector from "@/components/lang-selector.astro";
 ---
 
 <Layout>
   <main class="lg:px-16 px-4 pt-12 space-y-4 pb-20">
     <div>
-      <div
-        class="overflow-hidden group text-[clamp(3rem,10vw,12rem)] font-pixel leading-none h-lh"
-      >
-        <h1
-          class="group-hover:-translate-y-full transition-transform duration-300"
-        >
+      <div class="overflow-hidden group text-[clamp(3rem,10vw,12rem)] font-pixel leading-none h-lh">
+        <h1 class="group-hover:-translate-y-full transition-transform duration-300">
           ALEXIS TACNET
         </h1>
-        <div
-          class="group-hover:-translate-y-full transition-transform duration-300 text-muted-foreground"
-        >
+        <div class="group-hover:-translate-y-full transition-transform duration-300 text-muted-foreground">
           FUEGO
         </div>
       </div>
       <div class="flex justify-between items-end mt-4">
-        <div
-          class="font-pixel text-lg sm:text-2xl lg:text-4xl overflow-hidden group h-lh"
-        >
-          <p
-            class="group-hover:-translate-y-full transition-transform duration-300"
-          >
-            Software engineer, SRE and Designer.
+        <div class="font-pixel text-lg sm:text-2xl lg:text-4xl overflow-hidden group h-lh">
+          <p class="group-hover:-translate-y-full transition-transform duration-300">
+            <T key="home.tagline" />
           </p>
-          <p
-            class="group-hover:-translate-y-full transition-transform duration-300 text-muted-foreground"
-          >
-            I love building stuff.
+          <p class="group-hover:-translate-y-full transition-transform duration-300 text-muted-foreground">
+            <T key="home.tagline2" />
           </p>
         </div>
-        <ThemeSelector />
+        <div class="flex items-center gap-1">
+          <LangSelector />
+          <ThemeSelector />
+        </div>
       </div>
       <Separator class="mt-4" />
     </div>
@@ -56,74 +49,27 @@ import ThemeSelector from "@/components/theme-selector.astro";
     <div class="flex flex-col lg:flex-row gap-8 py-8">
       <div class="space-y-8 flex-1 flex flex-col px-2">
         <p class="font-medium lg:pt-12">
-          This is my personal website.<br />
-          I love to design, code, and deploy stuff.<br /> I currently work at
-          <a href="https://mistral.ai" id="mistral" class="font-medium">
-            Mistral AI
-          </a>
-          in Paris.
+        <T key="home.intro.welcome" /><br />
+        <T key="home.intro.love" /><br />
+        <T key="home.intro.work" slots={{ company: '<a href="https://mistral.ai" style="background: linear-gradient(#ffd800, #e10500); background-clip: text; -webkit-text-fill-color: transparent;" class="font-medium">Mistral AI</a>' }} />
         </p>
 
         <div class="mt-8">
-          <NavButton
-            href="/blog/"
-            title="Blog"
-            desc="I write about software engineering, design and more."
-          />
-          <NavButton href="/about" title="About" desc="Learn more about me." />
-          <NavButton
-            href="/now"
-            title="Now"
-            desc="What I am doing right now."
-          />
+          <NavButton href="/blog/" i18nTitleKey="home.blog.title" i18nDescKey="home.blog.desc" />
+          <NavButton href="/about" i18nTitleKey="home.about.title" i18nDescKey="home.about.desc" />
+          <NavButton href="/now" i18nTitleKey="home.now.title" i18nDescKey="home.now.desc" />
         </div>
 
         <div class="flex space-x-4 pt-16 flex-1 items-end">
-          <Button
-            variant="link"
-            href="https://github.com/fuegoio"
-            class="p-0"
-            target="_blank"
-          >
-            GitHub
-          </Button>
-          <Button
-            variant="link"
-            href="https://www.linkedin.com/in/alexis-tacnet-aa0478109/"
-            class="p-0"
-            target="_blank"
-          >
-            LinkedIn
-          </Button>
-          <Button
-            variant="link"
-            href="https://x.com/fuegoio"
-            class="p-0"
-            target="_blank"
-          >
-            Twitter
-          </Button>
+          <Button variant="link" href="https://github.com/fuegoio" class="p-0" target="_blank">GitHub</Button>
+          <Button variant="link" href="https://www.linkedin.com/in/alexis-tacnet-aa0478109/" class="p-0" target="_blank">LinkedIn</Button>
+          <Button variant="link" href="https://x.com/fuegoio" class="p-0" target="_blank">Twitter</Button>
         </div>
       </div>
       <div class="flex flex-1 justify-end group">
         <div class="border-4 border-foreground rounded relative">
-          <Image
-            src={art}
-            alt="art image"
-            class="object-cover"
-            width="800"
-            height="560"
-            layout="constrained"
-            priority
-          />
-          <Image
-            src={art2}
-            alt="art image"
-            class="object-cover absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 top-0 left-0"
-            width="800"
-            height="560"
-            layout="constrained"
-          />
+          <Image src={art} alt="art image" class="object-cover" width="800" height="560" layout="constrained" priority />
+          <Image src={art2} alt="art image" class="object-cover absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 top-0 left-0" width="800" height="560" layout="constrained" />
         </div>
       </div>
     </div>
@@ -131,90 +77,36 @@ import ThemeSelector from "@/components/theme-selector.astro";
     <Separator class="h-2" />
     <div class="flex flex-col lg:flex-row gap-8 py-8">
       <div class="flex-1 space-y-2 px-2">
-        <h2 class="font-pixel text-6xl">PROJECTS</h2>
-        <p class="text-sm max-w-120 lg:pl-12 pt-12">
-          I've always loved to work on projects on my own. Being able to ship
-          something from start to end is something I'm really passionate about.
-          A lot of projects did not make it to production, but some of them did.
-        </p>
+        <T key="home.projects.title" tag="h2" class="font-pixel text-6xl" />
+        <T key="home.projects.desc" tag="p" class="text-sm max-w-120 lg:pl-12 pt-12" />
       </div>
-
       <div class="flex-1 space-y-4">
-        <Project
-          name="Tracktrip"
-          url="https://tracktrip.app"
-          githubUrl="https://github.com/fuegoio/tracktrip"
-          year="2025"
-          description="Open-source expense tracker for travelers."
-          imageSrc={tracktrip}
-        />
-
-        <Project
-          name="Mots"
-          url="https://mots.alexistac.net"
-          githubUrl="https://github.com/fuegoio/mots"
-          year="2022"
-          description="A portable dictionary to learn new words."
-          imageSrc={mots}
-        />
+        <Project name="Tracktrip" url="https://tracktrip.app" githubUrl="https://github.com/fuegoio/tracktrip" year="2025" descriptionKey="project.tracktrip.desc" imageSrc={tracktrip} />
+        <Project name="Mots" url="https://mots.alexistac.net" githubUrl="https://github.com/fuegoio/mots" year="2022" descriptionKey="project.mots.desc" imageSrc={mots} />
       </div>
     </div>
 
     <Separator class="h-2 mt-16" />
     <div class="flex flex-col lg:flex-row gap-8 py-8">
       <div class="flex-1 space-y-2 px-2">
-        <h2 class="font-pixel text-6xl">LIBRARIES</h2>
-        <p class="text-sm max-w-120 lg:pl-12 pt-12">
-          Helping the community by building open-source libraries is something I
-          enjoy a lot. I try to build libraries that are useful and easy to use.
-        </p>
+        <T key="home.libraries.title" tag="h2" class="font-pixel text-6xl" />
+        <T key="home.libraries.desc" tag="p" class="text-sm max-w-120 lg:pl-12 pt-12" />
       </div>
-
       <div class="flex-1 space-y-4">
-        <Library
-          name="trpc-monitoring-middleware"
-          url="https://www.npmjs.com/package/trpc-monitoring-middleware"
-          githubUrl="https://github.com/fuegoio/trpc-monitoring-middleware"
-          year="2026"
-          description="tRPC middleware to automatically add OTel and Logging of all procedures."
-        />
-
-        <Library
-          name="trpc-db-collection"
-          url="https://www.npmjs.com/package/trpc-db-collection"
-          githubUrl="https://github.com/fuegoio/trpc-db-collection"
-          year="2025"
-          description="tRPC collection for TanStack DB, enabling real time sync."
-        />
+        <Library name="trpc-monitoring-middleware" url="https://www.npmjs.com/package/trpc-monitoring-middleware" githubUrl="https://github.com/fuegoio/trpc-monitoring-middleware" year="2026" descriptionKey="library.trpc-monitoring.desc" />
+        <Library name="trpc-db-collection" url="https://www.npmjs.com/package/trpc-db-collection" githubUrl="https://github.com/fuegoio/trpc-db-collection" year="2025" descriptionKey="library.trpc-db.desc" />
       </div>
     </div>
 
     <Separator class="h-2 mt-16" />
     <div class="flex flex-col lg:flex-row gap-8 py-8">
       <div class="flex-1 space-y-2 px-2">
-        <h2 class="font-pixel text-6xl">FINANCE</h2>
-        <p class="text-sm max-w-120 lg:pl-12 pt-4">
-          I'm also passionate about finance and economics. I built some tools to
-          help me understand the world better.
-        </p>
+        <T key="home.finance.title" tag="h2" class="font-pixel text-6xl" />
+        <T key="home.finance.desc" tag="p" class="text-sm max-w-120 lg:pl-12 pt-4" />
       </div>
-
       <div class="flex-1 space-y-4">
-        <Tool
-          name="Buy vs rent"
-          url="/finance/achat-location"
-          year="2026"
-          description="In France, it is commonly admitted that renting a house is loosing a lot of money, but it's not always true. This is a tool to compare the cost of buying vs renting a house."
-        />
+        <Tool url="/finance/achat-location" year="2026" nameKey="tool.buyvsrent.name" descriptionKey="tool.buyvsrent.desc" />
       </div>
     </div>
   </main>
 </Layout>
-
-<style>
-  #mistral {
-    background: linear-gradient(#ffd800, #e10500);
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-</style>

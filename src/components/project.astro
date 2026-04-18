@@ -1,17 +1,18 @@
 ---
 import { Github, ArrowUpRight } from "@lucide/astro";
 import { Image } from "astro:assets";
+import T from "@/components/T.astro";
 
 interface Props {
   name: string;
   url: string;
   githubUrl: string;
   year: string;
-  description: string;
+  descriptionKey: string;
   imageSrc: any;
 }
 
-const { name, url, githubUrl, year, description, imageSrc } = Astro.props;
+const { name, url, githubUrl, year, descriptionKey, imageSrc } = Astro.props;
 ---
 
 <div class="border-2 border-foreground bg-card">
@@ -25,7 +26,7 @@ const { name, url, githubUrl, year, description, imageSrc } = Astro.props;
   <div class="p-4">
     <div class="flex items-center gap-4">
       <a class="font-semibold flex-1" href={url} target="_blank">
-        <span class="underline"> {name} </span>
+        <span class="underline">{name}</span>
         <ArrowUpRight size={16} class="inline" />
       </a>
       <div class="text-gray-500 text-sm">{year}</div>
@@ -33,6 +34,6 @@ const { name, url, githubUrl, year, description, imageSrc } = Astro.props;
         <Github size={14} />
       </a>
     </div>
-    <div class="text-sm">{description}</div>
+    <T key={descriptionKey} class="text-sm" />
   </div>
 </div>
