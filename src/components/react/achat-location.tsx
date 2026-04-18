@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Button } from "@/components/react/ui/button";
 import {
   Field,
@@ -14,77 +15,55 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/react/ui/select";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "./ui/card";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-  InputGroupText,
-} from "./ui/input-group";
-import {
-  ArrowDown,
-  ArrowLeft,
-  ArrowRight,
-  ArrowUp,
-  Share2,
-  Sparkles,
-} from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText } from "./ui/input-group";
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Share2, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
-import {
-  parseAsFloat,
-  parseAsInteger,
-  parseAsString,
-  useQueryState,
-} from "nuqs";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-  type ChartConfig,
-} from "./ui/chart";
+import { parseAsFloat, parseAsInteger, parseAsString, useQueryState } from "nuqs";
+import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "./ui/chart";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 
-const DESCRIPTIONS = {
-  achat: {
-    investissement:
-      "L'investissement necéssaire à l'achat d'un bien est égal à l'épargne investie dans le bien plus les coûts liés à l'achat.",
-    couts:
-      "Les coûts de l'achat sont principalement les intérets de l'emprunt, la taxe foncière, les charges et les travaux.",
-    epargne:
-      "Lors d'un achat, ce que l'on épargne c'est ce que l'on rembourse de l'achat du bien, ce qu'on appelle le capital remboursé.",
-    plusvalue:
-      "Un capital (ici le bien) peut générer une plus-value, plus ou moins liquide. Si les prix de l'immobilier augmentent, alors la valeur du bien augmente et il y a une plus-value.",
-    capital:
-      "Dans ce comparatif, ce qui nous intéresse c'est de le capital total (l'épargne totale) dans le cas d'un achat par rapport à celui dans une location.",
-  },
-  location: {
-    investissement:
-      "Pour la location, l'investissement n'est pas calculé mais correspond à celui que l'on aurait mis en achat. Si on a cette capacité d'investissement en achat, on l'a en location aussi.",
-    couts:
-      "Dans le cas locatif, les couts sont uniquement les loyers, ce qui est peut-êtere plus avantageux que l'achat.",
-    epargne:
-      "On part alors du principe que l'on épargne ce qu'on ne dépense pas en loyer.",
-    plusvalue:
-      "Cette épargne peut être placée sur différents supports, qui ont un rendement plus ou moins élevé.",
-    capital:
-      "On peut alors comparer le capital dans le cas d'un achat avec celui dans le cas d'une location, qui peut en fait être plus élevé avant une certaine année !",
-  },
-} as const;
+import en from "../../../public/locales/en.json";
+import fr from "../../../public/locales/fr.json";
+
+const locales: Record<string, Record<string, string>> = { en, fr };
+
+function getLang(): string {
+  if (typeof localStorage === "undefined") return "fr";
+  const stored = localStorage.getItem("lang");
+  if (stored && stored in locales) return stored;
+  const browser = navigator.language.slice(0, 2).toLowerCase();
+  return browser in locales ? browser : "fr";
+}
+
+function useLang() {
+  const [lang, setLang] = useState<string>("fr");
+
+  useEffect(() => {
+    setLang(getLang());
+
+    const observer = new MutationObserver(() => {
+      setLang(document.documentElement.lang || "fr");
+    });
+    observer.observe(document.documentElement, { attributeFilter: ["lang"] });
+    return () => observer.disconnect();
+  }, []);
+
+  function t(key: string): string {
+    return locales[lang]?.[key] ?? locales["fr"]?.[key] ?? key;
+  }
+
+  return t;
+}
 
 const chartConfig = {
   achat: {
-    label: "Achat",
+    label: "Buy",
     color: "var(--chart-1)",
   },
   location: {
-    label: "Location",
+    label: "Rent",
     color: "var(--chart-2)",
   },
 } satisfies ChartConfig;
@@ -107,15 +86,11 @@ function calculateLocation(
   for (let year = 1; year <= years; year++) {
     // Calculate yearly loyer with inflation
     const inflationRateNum =
-      typeof inflationRate === "string"
-        ? parseFloat(inflationRate) || 0
-        : inflationRate;
-    const yearlyLoyer =
-      loyer * 12 * Math.pow(1 + inflationRateNum / 100, year - 1);
+      typeof inflationRate === "string" ? parseFloat(inflationRate) || 0 : inflationRate;
+    const yearlyLoyer = loyer * 12 * Math.pow(1 + inflationRateNum / 100, year - 1);
 
     // Calculate difference between location payment and achat payment
-    const achatTotalPayment =
-      achatYearlyPayment + taxeFonciere + charges + travaux;
+    const achatTotalPayment = achatYearlyPayment + taxeFonciere + charges + travaux;
     const difference = achatTotalPayment - yearlyLoyer;
 
     // Calculate placement interests on the cumulative difference
@@ -135,10 +110,7 @@ function calculateLocation(
 
   return {
     locationSchedule,
-    totalLoyer: locationSchedule.reduce(
-      (sum, year) => sum + year.yearlyLoyer,
-      0,
-    ),
+    totalLoyer: locationSchedule.reduce((sum, year) => sum + year.yearlyLoyer, 0),
   };
 }
 
@@ -162,9 +134,7 @@ function calculateMortgage(
   // Calculate monthly payment using the formula:
   // M = P [ i(1 + i)^n ] / [ (1 + i)^n - 1]
   const monthlyPayment =
-    (principal *
-      (monthlyInterestRate *
-        Math.pow(1 + monthlyInterestRate, numberOfPayments))) /
+    (principal * (monthlyInterestRate * Math.pow(1 + monthlyInterestRate, numberOfPayments))) /
     (Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1);
 
   // Generate amortization schedule
@@ -192,12 +162,9 @@ function calculateMortgage(
     const plusValueAmount = propertyValue * (plusValue / 100);
 
     // Apply inflation to costs
-    const inflatedTaxeFonciere =
-      taxeFonciere * Math.pow(1 + inflationRate / 100, year - 1);
-    const inflatedCharges =
-      charges * Math.pow(1 + inflationRate / 100, year - 1);
-    const inflatedTravaux =
-      travaux * Math.pow(1 + inflationRate / 100, year - 1);
+    const inflatedTaxeFonciere = taxeFonciere * Math.pow(1 + inflationRate / 100, year - 1);
+    const inflatedCharges = charges * Math.pow(1 + inflationRate / 100, year - 1);
+    const inflatedTravaux = travaux * Math.pow(1 + inflationRate / 100, year - 1);
 
     // Calculate capital total (yearlyPrincipal - costs + plusValue)
     capitalTotal += yearlyPrincipal + plusValueAmount;
@@ -226,36 +193,20 @@ function calculateMortgage(
 }
 
 export function AchatLocation() {
+  const t = useLang();
+
   // State for form inputs
-  const [amount, setAmount] = useQueryState(
-    "amount",
-    parseAsInteger.withDefault(200000),
-  );
-  const [apport, setApport] = useQueryState(
-    "apport",
-    parseAsInteger.withDefault(20000),
-  );
+  const [amount, setAmount] = useQueryState("amount", parseAsInteger.withDefault(200000));
+  const [apport, setApport] = useQueryState("apport", parseAsInteger.withDefault(20000));
   const [taux, setTaux] = useQueryState("taux", parseAsFloat.withDefault(3.5));
-  const [duration, setDuration] = useQueryState(
-    "duration",
-    parseAsInteger.withDefault(25),
-  );
-  const [plusValue, setPlusValue] = useQueryState(
-    "plusValue",
-    parseAsFloat.withDefault(0.5),
-  );
+  const [duration, setDuration] = useQueryState("duration", parseAsInteger.withDefault(25));
+  const [plusValue, setPlusValue] = useQueryState("plusValue", parseAsFloat.withDefault(0.5));
   const [taxeFonciere, setTaxeFonciere] = useQueryState(
     "taxeFonciere",
     parseAsInteger.withDefault(1000),
   );
-  const [charges, setCharges] = useQueryState(
-    "charges",
-    parseAsInteger.withDefault(1000),
-  );
-  const [travaux, setTravaux] = useQueryState(
-    "travaux",
-    parseAsInteger.withDefault(1500),
-  );
+  const [charges, setCharges] = useQueryState("charges", parseAsInteger.withDefault(1000));
+  const [travaux, setTravaux] = useQueryState("travaux", parseAsInteger.withDefault(1500));
   const [propertyType, setPropertyType] = useQueryState(
     "propertyType",
     parseAsString.withDefault("ancien"),
@@ -264,10 +215,7 @@ export function AchatLocation() {
     "inflationRate",
     parseAsFloat.withDefault(2),
   );
-  const [loyer, setLoyer] = useQueryState(
-    "loyer",
-    parseAsInteger.withDefault(700),
-  );
+  const [loyer, setLoyer] = useQueryState("loyer", parseAsInteger.withDefault(700));
   const [tauxPlacement, setTauxPlacement] = useQueryState(
     "tauxPlacement",
     parseAsFloat.withDefault(3),
@@ -288,14 +236,11 @@ export function AchatLocation() {
   // Copy share URL to clipboard
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.toString()).then(() => {
-      alert("Lien de partage copié dans le presse-papiers !");
+      alert(t("finance.buyvsrent.share.copied"));
     });
   };
 
-  const handleNumericInput = (
-    value: string,
-    setter: (value: number) => void,
-  ) => {
+  const handleNumericInput = (value: string, setter: (value: number) => void) => {
     const num = parseFloat(value);
     setter(isNaN(num) ? 0 : num);
   };
@@ -355,14 +300,9 @@ export function AchatLocation() {
     <div className="px-4 pb-4">
       <div className="px-3 py-4 border-b border-border/70 flex justify-between items-start flex-col sm:flex-row gap-4">
         <div>
-          <h1 className="text-4xl font-bold text-foreground">
-            Achat vs Location
-          </h1>
+          <h1 className="text-4xl font-bold text-foreground">{t("finance.buyvsrent.title")}</h1>
           <p className="mt-2 text-xs text-muted-foreground max-w-4xl">
-            En France, on dit souvent qu'acheter est plus intéressant que louer,
-            notamment à cause des loyers qui seraient "jeter de l'argent par les
-            fenetres". Mais la réalité économique est plus nuancée, comme le
-            montre ce comparatif.
+            {t("finance.buyvsrent.subtitle")}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -373,7 +313,7 @@ export function AchatLocation() {
               window.location.href = window.location.pathname;
             }}
           >
-            Réinitialiser
+            {t("finance.buyvsrent.reset")}
           </Button>
           <Button
             variant="outline"
@@ -382,7 +322,7 @@ export function AchatLocation() {
             className="flex items-center gap-2"
           >
             <Share2 className="h-4 w-4" />
-            Partager
+            {t("finance.buyvsrent.share")}
           </Button>
         </div>
       </div>
@@ -391,25 +331,25 @@ export function AchatLocation() {
         <div className="flex flex-col gap-4 max-w-[480px] w-full">
           <hgroup className="px-4 w-full">
             <h2 className="text-lg font-semibold text-foreground/90">
-              Parametres
+              {t("finance.buyvsrent.params.title")}
             </h2>
             <p className="text-xs text-muted-foreground mt-1">
-              Vos paramètres pour la simulation.
+              {t("finance.buyvsrent.params.subtitle")}
             </p>
           </hgroup>
           <Card className="w-full">
             <CardHeader>
-              <CardTitle className="text-lg font-semibold">Achat</CardTitle>
-              <CardDescription>
-                Donnez les informations sur l'achat du bien immobilier.
-              </CardDescription>
+              <CardTitle className="text-lg font-semibold">
+                {t("finance.buyvsrent.buy.title")}
+              </CardTitle>
+              <CardDescription>{t("finance.buyvsrent.buy.desc")}</CardDescription>
             </CardHeader>
             <CardContent>
               <FieldGroup>
                 <FieldSet>
                   <Field>
                     <FieldLabel htmlFor="amount" className="whitespace-nowrap">
-                      Montant d'achat du bien
+                      {t("finance.buyvsrent.buy.amount")}
                     </FieldLabel>
                     <InputGroup className="w-40">
                       <InputGroupInput
@@ -417,9 +357,7 @@ export function AchatLocation() {
                         required
                         placeholder="100 000"
                         defaultValue={amount}
-                        onChange={(e) =>
-                          handleNumericInput(e.target.value, setAmount)
-                        }
+                        onChange={(e) => handleNumericInput(e.target.value, setAmount)}
                       />
                       <InputGroupAddon align="inline-end">
                         <InputGroupText>EUR</InputGroupText>
@@ -431,29 +369,32 @@ export function AchatLocation() {
                 <FieldSet>
                   <FieldLegend className="flex items-center gap-2">
                     <ArrowLeft className="h-4 w-4" />
-                    Frais de notaire
+                    {t("finance.buyvsrent.buy.notaire.legend")}
                   </FieldLegend>
                   <Field>
                     <FieldLabel htmlFor="property-type">
-                      Type de bien
+                      {t("finance.buyvsrent.buy.notaire.type")}
                     </FieldLabel>
-                    <Select
-                      value={propertyType}
-                      onValueChange={(value) => setPropertyType(value)}
-                    >
+                    <Select value={propertyType} onValueChange={(value) => setPropertyType(value)}>
                       <SelectTrigger id="property-type" className="w-40">
                         <SelectValue placeholder="Type" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="neuf">Neuf (2,5%)</SelectItem>
-                        <SelectItem value="ancien">Ancien (7,5%)</SelectItem>
+                        <SelectItem value="neuf">
+                          {t("finance.buyvsrent.buy.notaire.new")}
+                        </SelectItem>
+                        <SelectItem value="ancien">
+                          {t("finance.buyvsrent.buy.notaire.old")}
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </Field>
                   <div className="p-2 text-xs border text-foreground bg-muted">
-                    <p>Frais de notaire: {formatCurrency(notaireFees)}</p>
                     <p>
-                      Montant total avec frais:{" "}
+                      {t("finance.buyvsrent.buy.notaire.fees")} {formatCurrency(notaireFees)}
+                    </p>
+                    <p>
+                      {t("finance.buyvsrent.buy.notaire.total")}{" "}
                       {formatCurrency(totalAmountWithFees)}
                     </p>
                   </div>
@@ -462,15 +403,12 @@ export function AchatLocation() {
                 <FieldSet>
                   <FieldLegend className="flex items-center gap-2">
                     <ArrowRight className="h-4 w-4" />
-                    Emprunt
+                    {t("finance.buyvsrent.buy.loan.legend")}
                   </FieldLegend>
                   <FieldGroup>
                     <Field>
-                      <FieldLabel
-                        htmlFor="apport"
-                        className="whitespace-nowrap"
-                      >
-                        Apport
+                      <FieldLabel htmlFor="apport" className="whitespace-nowrap">
+                        {t("finance.buyvsrent.buy.loan.apport")}
                       </FieldLabel>
                       <InputGroup className="w-40">
                         <InputGroupInput
@@ -478,9 +416,7 @@ export function AchatLocation() {
                           required
                           placeholder="10 000"
                           defaultValue={apport}
-                          onChange={(e) =>
-                            handleNumericInput(e.target.value, setApport)
-                          }
+                          onChange={(e) => handleNumericInput(e.target.value, setApport)}
                         />
                         <InputGroupAddon align="inline-end">
                           <InputGroupText>EUR</InputGroupText>
@@ -489,7 +425,7 @@ export function AchatLocation() {
                     </Field>
                     <Field>
                       <FieldLabel htmlFor="taux" className="whitespace-nowrap">
-                        Taux d'intérêt
+                        {t("finance.buyvsrent.buy.loan.taux")}
                       </FieldLabel>
                       <InputGroup className="w-16">
                         <InputGroupInput
@@ -497,9 +433,7 @@ export function AchatLocation() {
                           required
                           placeholder="3.00"
                           defaultValue={taux}
-                          onChange={(e) =>
-                            handleNumericInput(e.target.value, setTaux)
-                          }
+                          onChange={(e) => handleNumericInput(e.target.value, setTaux)}
                         />
                         <InputGroupAddon align="inline-end">
                           <InputGroupText>%</InputGroupText>
@@ -507,7 +441,9 @@ export function AchatLocation() {
                       </InputGroup>
                     </Field>
                     <Field>
-                      <FieldLabel htmlFor="duration">Durée du prêt</FieldLabel>
+                      <FieldLabel htmlFor="duration">
+                        {t("finance.buyvsrent.buy.loan.duration")}
+                      </FieldLabel>
                       <Select
                         value={duration.toString()}
                         onValueChange={(value) => setDuration(parseInt(value))}
@@ -529,22 +465,20 @@ export function AchatLocation() {
                 <FieldSet>
                   <FieldLegend className="flex items-center gap-2">
                     <ArrowDown className="h-4 w-4" />
-                    Couts du bien
+                    {t("finance.buyvsrent.buy.costs.legend")}
                   </FieldLegend>
 
                   <FieldGroup>
                     <Field>
                       <FieldLabel htmlFor="taxe-fonciere">
-                        Taxe foncière annuelle
+                        {t("finance.buyvsrent.buy.costs.taxe")}
                       </FieldLabel>
                       <InputGroup className="w-40">
                         <InputGroupInput
                           id="taxe-fonciere"
                           placeholder="1 000"
                           value={taxeFonciere}
-                          onChange={(e) =>
-                            handleNumericInput(e.target.value, setTaxeFonciere)
-                          }
+                          onChange={(e) => handleNumericInput(e.target.value, setTaxeFonciere)}
                         />
                         <InputGroupAddon align="inline-end">
                           <InputGroupText>EUR</InputGroupText>
@@ -552,20 +486,15 @@ export function AchatLocation() {
                       </InputGroup>
                     </Field>
                     <Field>
-                      <FieldLabel
-                        htmlFor="charges"
-                        className="whitespace-nowrap"
-                      >
-                        Charges annuelles
+                      <FieldLabel htmlFor="charges" className="whitespace-nowrap">
+                        {t("finance.buyvsrent.buy.costs.charges")}
                       </FieldLabel>
                       <InputGroup className="w-40">
                         <InputGroupInput
                           id="charges"
                           placeholder="2 000"
                           value={charges}
-                          onChange={(e) =>
-                            handleNumericInput(e.target.value, setCharges)
-                          }
+                          onChange={(e) => handleNumericInput(e.target.value, setCharges)}
                         />
                         <InputGroupAddon align="inline-end">
                           <InputGroupText>EUR</InputGroupText>
@@ -573,20 +502,15 @@ export function AchatLocation() {
                       </InputGroup>
                     </Field>
                     <Field>
-                      <FieldLabel
-                        htmlFor="travaux"
-                        className="whitespace-nowrap"
-                      >
-                        Travaux annuels
+                      <FieldLabel htmlFor="travaux" className="whitespace-nowrap">
+                        {t("finance.buyvsrent.buy.costs.travaux")}
                       </FieldLabel>
                       <InputGroup className="w-40">
                         <InputGroupInput
                           id="travaux"
                           placeholder="1 000"
                           value={travaux}
-                          onChange={(e) =>
-                            handleNumericInput(e.target.value, setTravaux)
-                          }
+                          onChange={(e) => handleNumericInput(e.target.value, setTravaux)}
                         />
                         <InputGroupAddon align="inline-end">
                           <InputGroupText>EUR</InputGroupText>
@@ -598,16 +522,14 @@ export function AchatLocation() {
                   <div className="border p-3 border-gray-300">
                     <div className="flex items-center gap-2 text-xs">
                       <Sparkles className="h-4 w-4" />
-                      Ajuster automatiquement les coûts
+                      {t("finance.buyvsrent.buy.costs.auto")}
                     </div>
                     <div className="flex items-center gap-2 mt-2">
                       <InputGroup>
                         <InputGroupInput
                           placeholder="120"
                           defaultValue={surface ?? undefined}
-                          onChange={(e) =>
-                            handleNumericInput(e.target.value, setSurface)
-                          }
+                          onChange={(e) => handleNumericInput(e.target.value, setSurface)}
                         />
                         <InputGroupAddon align="inline-end">
                           <InputGroupText>
@@ -617,12 +539,8 @@ export function AchatLocation() {
                           </InputGroupText>
                         </InputGroupAddon>
                       </InputGroup>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={computeCosts}
-                      >
-                        Calculer
+                      <Button variant="outline" size="sm" onClick={computeCosts}>
+                        {t("finance.buyvsrent.buy.costs.compute")}
                       </Button>
                     </div>
                   </div>
@@ -631,23 +549,18 @@ export function AchatLocation() {
                 <FieldSet>
                   <FieldLegend className="flex items-center gap-2">
                     <ArrowUp className="h-4 w-4" />
-                    Rendement du bien
+                    {t("finance.buyvsrent.buy.yield.legend")}
                   </FieldLegend>
                   <Field>
-                    <FieldLabel
-                      htmlFor="plus-value"
-                      className="whitespace-nowrap"
-                    >
-                      Plus-value annuelle
+                    <FieldLabel htmlFor="plus-value" className="whitespace-nowrap">
+                      {t("finance.buyvsrent.buy.yield.plusvalue")}
                     </FieldLabel>
                     <InputGroup className="w-40">
                       <InputGroupInput
                         id="plus-value"
                         placeholder="1"
                         defaultValue={plusValue}
-                        onChange={(e) =>
-                          handleNumericInput(e.target.value, setPlusValue)
-                        }
+                        onChange={(e) => handleNumericInput(e.target.value, setPlusValue)}
                       />
                       <InputGroupAddon align="inline-end">
                         <InputGroupText>%</InputGroupText>
@@ -661,17 +574,17 @@ export function AchatLocation() {
 
           <Card className="w-full">
             <CardHeader>
-              <CardTitle className="text-lg font-semibold">Location</CardTitle>
-              <CardDescription>
-                Donnez les informations sur la location du bien immobilier.
-              </CardDescription>
+              <CardTitle className="text-lg font-semibold">
+                {t("finance.buyvsrent.rent.title")}
+              </CardTitle>
+              <CardDescription>{t("finance.buyvsrent.rent.desc")}</CardDescription>
             </CardHeader>
             <CardContent>
               <FieldSet>
                 <FieldGroup>
                   <Field>
                     <FieldLabel htmlFor="loyer" className="whitespace-nowrap">
-                      Loyer mensuel
+                      {t("finance.buyvsrent.rent.loyer")}
                     </FieldLabel>
                     <InputGroup className="w-40">
                       <InputGroupInput
@@ -679,9 +592,7 @@ export function AchatLocation() {
                         required
                         placeholder="1 000"
                         defaultValue={loyer}
-                        onChange={(e) =>
-                          handleNumericInput(e.target.value, setLoyer)
-                        }
+                        onChange={(e) => handleNumericInput(e.target.value, setLoyer)}
                       />
                       <InputGroupAddon align="inline-end">
                         <InputGroupText>EUR</InputGroupText>
@@ -690,20 +601,15 @@ export function AchatLocation() {
                   </Field>
 
                   <Field>
-                    <FieldLabel
-                      htmlFor="taux-placement"
-                      className="whitespace-nowrap"
-                    >
-                      Taux de placement de la différence
+                    <FieldLabel htmlFor="taux-placement" className="whitespace-nowrap">
+                      {t("finance.buyvsrent.rent.placement")}
                     </FieldLabel>
                     <InputGroup className="w-40">
                       <InputGroupInput
                         id="taux-placement"
                         placeholder="3"
                         defaultValue={tauxPlacement}
-                        onChange={(e) =>
-                          handleNumericInput(e.target.value, setTauxPlacement)
-                        }
+                        onChange={(e) => handleNumericInput(e.target.value, setTauxPlacement)}
                       />
                       <InputGroupAddon align="inline-end">
                         <InputGroupText>%</InputGroupText>
@@ -717,19 +623,13 @@ export function AchatLocation() {
 
           <Card className="w-full">
             <CardHeader>
-              <CardTitle>Taux d'inflation</CardTitle>
-              <CardDescription>
-                Taux d'inflation annuel qui influence les loyers, taxes
-                foncières, charges et travaux.
-              </CardDescription>
+              <CardTitle>{t("finance.buyvsrent.inflation.title")}</CardTitle>
+              <CardDescription>{t("finance.buyvsrent.inflation.desc")}</CardDescription>
             </CardHeader>
             <CardContent>
               <Field>
-                <FieldLabel
-                  htmlFor="inflation-rate"
-                  className="whitespace-nowrap"
-                >
-                  Taux d'inflation annuel
+                <FieldLabel htmlFor="inflation-rate" className="whitespace-nowrap">
+                  {t("finance.buyvsrent.inflation.label")}
                 </FieldLabel>
                 <InputGroup className="w-40">
                   <InputGroupInput
@@ -752,10 +652,10 @@ export function AchatLocation() {
         <div className="flex flex-col gap-4 border-t lg:border-t-0 pt-4 lg:pt-0 lg:border-l lg:pl-4 border-border/70 flex-1 min-w-0">
           <hgroup className="px-4">
             <h2 className="text-lg font-semibold text-foreground/90">
-              Simulation
+              {t("finance.buyvsrent.simulation.title")}
             </h2>
             <p className="text-xs text-muted-foreground mt-1">
-              Comparaison entre l'achat et la location du bien immobilier.
+              {t("finance.buyvsrent.simulation.subtitle")}
             </p>
           </hgroup>
           <Card className="h-full flex-1 p-0">
@@ -763,22 +663,24 @@ export function AchatLocation() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b align-bottom [&>th]:whitespace-nowrap [&>th]:pr-2">
-                    <th className="p-2 text-left font-medium">Année</th>
+                    <th className="p-2 text-left font-medium">
+                      {t("finance.buyvsrent.table.year")}
+                    </th>
                     <th className="p-2 text-left font-normal border-l">
                       <div className="font-semibold text-foreground text-lg">
-                        Achat
+                        {t("finance.buyvsrent.buy.title")}
                       </div>
                       <div className="flex items-center">
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <span>Investissement</span>
+                            <span>{t("finance.buyvsrent.table.investment")}</span>
                           </TooltipTrigger>
                           <TooltipContent side="bottom">
                             <div className="opacity-80">
-                              {DESCRIPTIONS.achat.investissement}
+                              {t("finance.buyvsrent.desc.buy.investment")}
                             </div>
                             <div className="border-t mb-2 mt-2 w-full" />
-                            Investissement = Coûts + Epargne
+                            {t("finance.buyvsrent.tooltip.buy.investment.formula")}
                           </TooltipContent>
                         </Tooltip>
                       </div>
@@ -786,129 +688,118 @@ export function AchatLocation() {
                     <th className="p-2 text-left font-normal text-muted-foreground">
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <span>Coûts</span>
+                          <span>{t("finance.buyvsrent.table.costs")}</span>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
-                          <div className="opacity-80">
-                            {DESCRIPTIONS.achat.couts}
-                          </div>
+                          <div className="opacity-80">{t("finance.buyvsrent.desc.buy.costs")}</div>
                           <div className="border-t mb-2 mt-2 w-full" />
-                          Coûts = Intérêts payés + (Taxe foncière + Charges +
-                          Travaux) * Inflation
+                          {t("finance.buyvsrent.tooltip.buy.costs.formula")}
                         </TooltipContent>
                       </Tooltip>
                     </th>
                     <th className="p-2 text-left font-normal text-muted-foreground">
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <span>Epargne</span>
+                          <span>{t("finance.buyvsrent.table.savings")}</span>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
                           <div className="opacity-80">
-                            {DESCRIPTIONS.achat.epargne}
+                            {t("finance.buyvsrent.desc.buy.savings")}
                           </div>
                           <div className="border-t mb-2 mt-2 w-full" />
-                          Epargne = Capital remboursé
+                          {t("finance.buyvsrent.tooltip.buy.savings.formula")}
                         </TooltipContent>
                       </Tooltip>
                     </th>
                     <th className="p-2 text-left font-normal text-muted-foreground">
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <span>Plus-value</span>
+                          <span>{t("finance.buyvsrent.table.gain")}</span>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
-                          <div className="opacity-80">
-                            {DESCRIPTIONS.achat.plusvalue}
-                          </div>
+                          <div className="opacity-80">{t("finance.buyvsrent.desc.buy.gain")}</div>
                           <div className="border-t mb-2 mt-2 w-full" />
-                          Plus-value = Valeur du bien * Taux de plus-value
+                          {t("finance.buyvsrent.tooltip.buy.gain.formula")}
                         </TooltipContent>
                       </Tooltip>
                     </th>
                     <th className="p-2 text-left">
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <span>Capital total</span>
+                          <span>{t("finance.buyvsrent.table.capital")}</span>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
                           <div className="opacity-80">
-                            {DESCRIPTIONS.achat.capital}
+                            {t("finance.buyvsrent.desc.buy.capital")}
                           </div>
                           <div className="border-t mb-2 mt-2 w-full" />
-                          Capital total = Capital existant + Capital remboursé +
-                          Plus-value
+                          {t("finance.buyvsrent.tooltip.buy.capital.formula")}
                         </TooltipContent>
                       </Tooltip>
                     </th>
 
                     <th className="p-2 text-left font-normal border-l">
                       <div className="font-semibold text-foreground text-lg">
-                        Location
+                        {t("finance.buyvsrent.rent.title")}
                       </div>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <span>Investissement</span>
+                          <span>{t("finance.buyvsrent.table.investment")}</span>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
                           <div className="opacity-80">
-                            {DESCRIPTIONS.location.investissement}
+                            {t("finance.buyvsrent.desc.rent.investment")}
                           </div>
                           <div className="border-t mb-2 mt-2 w-full" />
-                          Investissement = Meme investissement que en achat
+                          {t("finance.buyvsrent.tooltip.rent.investment.formula")}
                         </TooltipContent>
                       </Tooltip>
                     </th>
                     <th className="p-2 text-left font-normal text-muted-foreground">
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <span>Coûts (loyer)</span>
+                          <span>{t("finance.buyvsrent.table.costs.rent")}</span>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
-                          <div className="opacity-80">
-                            {DESCRIPTIONS.location.couts}
-                          </div>
+                          <div className="opacity-80">{t("finance.buyvsrent.desc.rent.costs")}</div>
                           <div className="border-t mb-2 mt-2 w-full" />
-                          Loyer annuel = Loyer mensuel * 12 * Inflation
+                          {t("finance.buyvsrent.tooltip.rent.costs.formula")}
                         </TooltipContent>
                       </Tooltip>
                     </th>
                     <th className="p-2 text-left font-normal text-muted-foreground">
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <span>Epargne</span>
+                          <span>{t("finance.buyvsrent.table.savings")}</span>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
-                          Epargne = Investissement - Loyer
+                          {t("finance.buyvsrent.tooltip.rent.savings.formula")}
                         </TooltipContent>
                       </Tooltip>
                     </th>
                     <th className="p-2 text-left font-normal text-muted-foreground">
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <span>Plus-value</span>
+                          <span>{t("finance.buyvsrent.table.gain")}</span>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
-                          <div className="opacity-80">
-                            {DESCRIPTIONS.location.plusvalue}
-                          </div>
+                          <div className="opacity-80">{t("finance.buyvsrent.desc.rent.gain")}</div>
                           <div className="border-t mb-2 mt-2 w-full" />
-                          Plus-value = Capital existant * Taux de placement
+                          {t("finance.buyvsrent.tooltip.rent.gain.formula")}
                         </TooltipContent>
                       </Tooltip>
                     </th>
                     <th className="p-2 text-left">
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <span>Capital total</span>
+                          <span>{t("finance.buyvsrent.table.capital")}</span>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
                           <div className="opacity-80">
-                            {DESCRIPTIONS.location.capital}
+                            {t("finance.buyvsrent.desc.rent.capital")}
                           </div>
                           <div className="border-t mb-2 mt-2 w-full" />
-                          Capital total = Capital existant + Epargne +
-                          Plus-value
+                          {t("finance.buyvsrent.tooltip.rent.capital.formula")}
                         </TooltipContent>
                       </Tooltip>
                     </th>
@@ -936,13 +827,13 @@ export function AchatLocation() {
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
                           <div className="opacity-80">
-                            {DESCRIPTIONS.achat.investissement}
+                            {t("finance.buyvsrent.desc.buy.investment")}
                           </div>
                           <div className="border-t mb-2 mt-2 w-full" />
-                          Investissement = Coûts + Epargne
+                          {t("finance.buyvsrent.tooltip.buy.investment.formula")}
                           <div className="border-t mb-6 mt-2 w-full" />
                           <div className="flex items-center justify-between">
-                            Coûts
+                            {t("finance.buyvsrent.table.costs")}
                             <div>
                               {formatCurrency(
                                 yearData.taxeFonciere +
@@ -953,14 +844,12 @@ export function AchatLocation() {
                             </div>
                           </div>
                           <div className="flex items-center justify-between">
-                            Epargne
-                            <div>
-                              {formatCurrency(yearData.yearlyPrincipal)}
-                            </div>
+                            {t("finance.buyvsrent.table.savings")}
+                            <div>{formatCurrency(yearData.yearlyPrincipal)}</div>
                           </div>
                           <div className="border-t my-2 w-full" />
                           <div className="flex items-center justify-between">
-                            Investissement
+                            {t("finance.buyvsrent.table.investment")}
                             <div>
                               {formatCurrency(
                                 yearData.yearlyPayment +
@@ -984,54 +873,45 @@ export function AchatLocation() {
                           </td>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
-                          <div className="opacity-80">
-                            {DESCRIPTIONS.achat.couts}
-                          </div>
+                          <div className="opacity-80">{t("finance.buyvsrent.desc.buy.costs")}</div>
                           <div className="border-t mb-2 mt-2 w-full" />
-                          Coûts = Intérêts payés + (Taxe foncière + Charges +
-                          Travaux) * Inflation
+                          {t("finance.buyvsrent.tooltip.buy.costs.formula")}
                           <div className="border-t mb-6 mt-2 w-full" />
-                          <div className="font-medium">Emprunt</div>
+                          <div className="font-medium">
+                            {t("finance.buyvsrent.tooltip.costs.loan")}
+                          </div>
                           <div className="flex items-center justify-between text-muted-foreground">
-                            Remboursement annuel
+                            {t("finance.buyvsrent.tooltip.costs.annual")}
                             <div>
-                              {formatCurrency(
-                                yearData.yearlyInterest +
-                                  yearData.yearlyPrincipal,
-                              )}
+                              {formatCurrency(yearData.yearlyInterest + yearData.yearlyPrincipal)}
                             </div>
                           </div>
                           <div className="flex items-center justify-between pl-2">
-                            Intérêts payés
+                            {t("finance.buyvsrent.tooltip.costs.interest")}
                             <div>{formatCurrency(yearData.yearlyInterest)}</div>
                           </div>
                           <div className="flex items-center justify-between text-muted-foreground pl-2">
-                            Capital remboursé
-                            <div>
-                              {formatCurrency(yearData.yearlyPrincipal)}
-                            </div>
+                            {t("finance.buyvsrent.tooltip.costs.principal")}
+                            <div>{formatCurrency(yearData.yearlyPrincipal)}</div>
                           </div>
                           <div className="border-t mb-4 mt-2 w-full" />
                           <div className="flex items-center justify-between">
-                            Taxe foncière
+                            {t("finance.buyvsrent.tooltip.costs.taxe")}
                             <div>{formatCurrency(yearData.taxeFonciere)}</div>
                           </div>
                           <div className="flex items-center justify-between">
-                            Charges
+                            {t("finance.buyvsrent.tooltip.costs.charges")}
                             <div>{formatCurrency(yearData.charges)}</div>
                           </div>
                           <div className="flex items-center justify-between">
-                            Travaux
+                            {t("finance.buyvsrent.tooltip.costs.travaux")}
                             <div>{formatCurrency(yearData.travaux)}</div>
                           </div>
                           <div className="flex items-center justify-between">
-                            Inflation totale depuis année 1
+                            {t("finance.buyvsrent.tooltip.costs.inflation")}
                             <div>
                               {(
-                                Math.pow(
-                                  1 + inflationRate / 100,
-                                  yearData.year - 1,
-                                ) - 1
+                                Math.pow(1 + inflationRate / 100, yearData.year - 1) - 1
                               ).toLocaleString(undefined, {
                                 style: "percent",
                                 maximumSignificantDigits: 4,
@@ -1040,7 +920,7 @@ export function AchatLocation() {
                           </div>
                           <div className="border-t mb-4 mt-2 w-full" />
                           <div className="flex items-center justify-between">
-                            Coûts
+                            {t("finance.buyvsrent.table.costs")}
                             <div>
                               {formatCurrency(
                                 yearData.taxeFonciere +
@@ -1060,37 +940,32 @@ export function AchatLocation() {
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
                           <div className="opacity-80">
-                            {DESCRIPTIONS.achat.epargne}
+                            {t("finance.buyvsrent.desc.buy.savings")}
                           </div>
                           <div className="border-t mb-2 mt-2 w-full" />
-                          Epargne = Capital remboursé
+                          {t("finance.buyvsrent.tooltip.buy.savings.formula")}
                           <div className="border-t mb-6 mt-2 w-full" />
-                          <div className="font-medium">Emprunt</div>
+                          <div className="font-medium">
+                            {t("finance.buyvsrent.tooltip.costs.loan")}
+                          </div>
                           <div className="flex items-center justify-between text-muted-foreground gap-4">
-                            Remboursement annuel
+                            {t("finance.buyvsrent.tooltip.costs.annual")}
                             <div>
-                              {formatCurrency(
-                                yearData.yearlyInterest +
-                                  yearData.yearlyPrincipal,
-                              )}
+                              {formatCurrency(yearData.yearlyInterest + yearData.yearlyPrincipal)}
                             </div>
                           </div>
                           <div className="flex items-center justify-between pl-2 text-muted-foreground">
-                            Intérêts payés
+                            {t("finance.buyvsrent.tooltip.costs.interest")}
                             <div>{formatCurrency(yearData.yearlyInterest)}</div>
                           </div>
                           <div className="flex items-center justify-between pl-2">
-                            Capital remboursé
-                            <div>
-                              {formatCurrency(yearData.yearlyPrincipal)}
-                            </div>
+                            {t("finance.buyvsrent.tooltip.costs.principal")}
+                            <div>{formatCurrency(yearData.yearlyPrincipal)}</div>
                           </div>
                           <div className="border-t mb-4 mt-2 w-full" />
                           <div className="flex items-center justify-between">
-                            Epargne
-                            <div>
-                              {formatCurrency(yearData.yearlyPrincipal)}
-                            </div>
+                            {t("finance.buyvsrent.table.savings")}
+                            <div>{formatCurrency(yearData.yearlyPrincipal)}</div>
                           </div>
                         </TooltipContent>
                       </Tooltip>
@@ -1101,18 +976,16 @@ export function AchatLocation() {
                           </td>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
-                          <div className="opacity-80">
-                            {DESCRIPTIONS.achat.plusvalue}
-                          </div>
+                          <div className="opacity-80">{t("finance.buyvsrent.desc.buy.gain")}</div>
                           <div className="border-t mb-2 mt-2 w-full" />
-                          Plus-value = Valeur du bien * Taux de plus-value
+                          {t("finance.buyvsrent.tooltip.buy.gain.formula")}
                           <div className="border-t mb-6 mt-2 w-full" />
                           <div className="flex items-center justify-between">
-                            Valeur du bien
+                            {t("finance.buyvsrent.tooltip.gain.value")}
                             <div>{formatCurrency(yearData.propertyValue)}</div>
                           </div>
                           <div className="flex items-center justify-between">
-                            Taux de plus-value
+                            {t("finance.buyvsrent.tooltip.gain.rate")}
                             <div>
                               {(plusValue / 100).toLocaleString(undefined, {
                                 style: "percent",
@@ -1121,10 +994,8 @@ export function AchatLocation() {
                           </div>
                           <div className="border-t mb-2 mt-2 w-full" />
                           <div className="flex items-center justify-between">
-                            Valeur du bien
-                            <div>
-                              {formatCurrency(yearData.plusValueAmount)}
-                            </div>
+                            {t("finance.buyvsrent.tooltip.gain.value")}
+                            <div>{formatCurrency(yearData.plusValueAmount)}</div>
                           </div>
                         </TooltipContent>
                       </Tooltip>
@@ -1133,8 +1004,8 @@ export function AchatLocation() {
                           <td
                             className={cn(
                               "p-2",
-                              locationData.locationSchedule[index]
-                                .capitalTotalLocation > yearData.capitalTotal
+                              locationData.locationSchedule[index].capitalTotalLocation >
+                                yearData.capitalTotal
                                 ? ""
                                 : "font-semibold",
                             )}
@@ -1144,36 +1015,31 @@ export function AchatLocation() {
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
                           <div className="opacity-80">
-                            {DESCRIPTIONS.achat.capital}
+                            {t("finance.buyvsrent.desc.buy.capital")}
                           </div>
                           <div className="border-t mb-2 mt-2 w-full" />
-                          Capital total = Capital existant + Capital remboursé +
-                          Plus-value
+                          {t("finance.buyvsrent.tooltip.buy.capital.formula")}
                           <div className="border-t mb-6 mt-2 w-full" />
                           <div className="flex items-center justify-between">
-                            Capital existant
+                            {t("finance.buyvsrent.tooltip.capital.existing")}
                             <div>
                               {formatCurrency(
-                                mortgageData.schedule[index - 1]
-                                  ?.capitalTotal || apport - notaireFees,
+                                mortgageData.schedule[index - 1]?.capitalTotal ||
+                                  apport - notaireFees,
                               )}
                             </div>
                           </div>
                           <div className="flex items-center justify-between">
-                            Capital remboursé
-                            <div>
-                              {formatCurrency(yearData.yearlyPrincipal)}
-                            </div>
+                            {t("finance.buyvsrent.tooltip.capital.repaid")}
+                            <div>{formatCurrency(yearData.yearlyPrincipal)}</div>
                           </div>
                           <div className="flex items-center justify-between">
-                            Plus-value
-                            <div>
-                              {formatCurrency(yearData.plusValueAmount)}
-                            </div>
+                            {t("finance.buyvsrent.tooltip.capital.gain")}
+                            <div>{formatCurrency(yearData.plusValueAmount)}</div>
                           </div>
                           <div className="border-t mb-2 mt-2 w-full" />
                           <div className="flex items-center justify-between">
-                            Capital total
+                            {t("finance.buyvsrent.tooltip.capital.total")}
                             <div>{formatCurrency(yearData.capitalTotal)}</div>
                           </div>
                         </TooltipContent>
@@ -1192,43 +1058,36 @@ export function AchatLocation() {
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
                           <div className="opacity-80">
-                            {DESCRIPTIONS.location.investissement}
+                            {t("finance.buyvsrent.desc.rent.investment")}
                           </div>
                           <div className="border-t mb-2 mt-2 w-full" />
-                          Investissement = Meme investissement que en achat
+                          {t("finance.buyvsrent.tooltip.rent.investment.formula")}
                         </TooltipContent>
                       </Tooltip>
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <td className="p-2 text-red-500">
-                            {formatCurrency(
-                              locationData.locationSchedule[index].yearlyLoyer,
-                            )}
+                            {formatCurrency(locationData.locationSchedule[index].yearlyLoyer)}
                           </td>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
-                          <div className="opacity-80">
-                            {DESCRIPTIONS.location.couts}
-                          </div>
+                          <div className="opacity-80">{t("finance.buyvsrent.desc.rent.costs")}</div>
                           <div className="border-t mb-2 mt-2 w-full" />
-                          Loyer annuel = Loyer mensuel * 12 * Inflation
+                          {t("finance.buyvsrent.tooltip.rent.costs.formula")}
                           <div className="border-t mb-6 mt-2 w-full" />
                           <div className="flex items-center justify-between text-muted-foreground">
-                            Loyer mensuel
+                            {t("finance.buyvsrent.tooltip.rent.monthly")}
                             <div>{formatCurrency(loyer)}</div>
                           </div>
                           <div className="flex items-center justify-between">
-                            Loyer annuel
+                            {t("finance.buyvsrent.tooltip.rent.annual")}
                             <div>{formatCurrency(loyer * 12)}</div>
                           </div>
                           <div className="flex items-center justify-between gap-4">
-                            Inflation depuis l'année 1
+                            {t("finance.buyvsrent.tooltip.rent.inflation")}
                             <div>
                               {(
-                                Math.pow(
-                                  1 + inflationRate / 100,
-                                  yearData.year - 1,
-                                ) - 1
+                                Math.pow(1 + inflationRate / 100, yearData.year - 1) - 1
                               ).toLocaleString(undefined, {
                                 style: "percent",
                                 maximumSignificantDigits: 4,
@@ -1237,12 +1096,9 @@ export function AchatLocation() {
                           </div>
                           <div className="border-t mb-2 mt-2 w-full" />
                           <div className="flex items-center justify-between">
-                            Coûts
+                            {t("finance.buyvsrent.table.costs")}
                             <div>
-                              {formatCurrency(
-                                locationData.locationSchedule[index]
-                                  .yearlyLoyer,
-                              )}
+                              {formatCurrency(locationData.locationSchedule[index].yearlyLoyer)}
                             </div>
                           </div>
                         </TooltipContent>
@@ -1250,20 +1106,18 @@ export function AchatLocation() {
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <td className="p-2 text-violet-500">
-                            {formatCurrency(
-                              locationData.locationSchedule[index].difference,
-                            )}
+                            {formatCurrency(locationData.locationSchedule[index].difference)}
                           </td>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
                           <div className="opacity-80">
-                            {DESCRIPTIONS.location.epargne}
+                            {t("finance.buyvsrent.desc.rent.savings")}
                           </div>
                           <div className="border-t mb-2 mt-2 w-full" />
-                          Epargne = Investissement - Loyer
+                          {t("finance.buyvsrent.tooltip.rent.savings.formula")}
                           <div className="border-t mb-6 mt-2 w-full" />
                           <div className="flex items-center justify-between">
-                            Investissement
+                            {t("finance.buyvsrent.tooltip.rent.savings.investment")}
                             <div>
                               {formatCurrency(
                                 yearData.yearlyPayment +
@@ -1274,21 +1128,16 @@ export function AchatLocation() {
                             </div>
                           </div>
                           <div className="flex items-center justify-between">
-                            Loyer
+                            {t("finance.buyvsrent.tooltip.rent.savings.rent")}
                             <div>
-                              {formatCurrency(
-                                locationData.locationSchedule[index]
-                                  .yearlyLoyer,
-                              )}
+                              {formatCurrency(locationData.locationSchedule[index].yearlyLoyer)}
                             </div>
                           </div>
                           <div className="border-t mb-2 mt-2 w-full" />
                           <div className="flex items-center justify-between">
-                            Epargne
+                            {t("finance.buyvsrent.tooltip.rent.savings.savings")}
                             <div>
-                              {formatCurrency(
-                                locationData.locationSchedule[index].difference,
-                              )}
+                              {formatCurrency(locationData.locationSchedule[index].difference)}
                             </div>
                           </div>
                         </TooltipContent>
@@ -1297,38 +1146,34 @@ export function AchatLocation() {
                         <TooltipTrigger asChild>
                           <td className="p-2 text-green-500 border-l border-border/20">
                             {formatCurrency(
-                              locationData.locationSchedule[index]
-                                .placementInterests,
+                              locationData.locationSchedule[index].placementInterests,
                             )}
                           </td>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
-                          <div className="opacity-80">
-                            {DESCRIPTIONS.location.plusvalue}
-                          </div>
+                          <div className="opacity-80">{t("finance.buyvsrent.desc.rent.gain")}</div>
                           <div className="border-t mb-2 mt-2 w-full" />
-                          Plus-value = Capital existant * Taux de placement
+                          {t("finance.buyvsrent.tooltip.rent.gain.formula")}
                           <div className="border-t mb-6 mt-2 w-full" />
                           <div className="flex items-center justify-between">
-                            Capital existant
+                            {t("finance.buyvsrent.tooltip.rent.gain.existing")}
                             <div>
                               {formatCurrency(
-                                locationData.locationSchedule[index - 1]
-                                  ?.capitalTotalLocation || apport,
+                                locationData.locationSchedule[index - 1]?.capitalTotalLocation ||
+                                  apport,
                               )}
                             </div>
                           </div>
                           <div className="flex items-center justify-between">
-                            Taux de placement
+                            {t("finance.buyvsrent.tooltip.rent.gain.rate")}
                             <div>{tauxPlacement}%</div>
                           </div>
                           <div className="border-t mb-2 mt-2 w-full" />
                           <div className="flex items-center justify-between">
-                            Plus-value
+                            {t("finance.buyvsrent.table.gain")}
                             <div>
                               {formatCurrency(
-                                locationData.locationSchedule[index]
-                                  .placementInterests,
+                                locationData.locationSchedule[index].placementInterests,
                               )}
                             </div>
                           </div>
@@ -1339,59 +1184,53 @@ export function AchatLocation() {
                           <td
                             className={cn(
                               "p-2",
-                              locationData.locationSchedule[index]
-                                .capitalTotalLocation > yearData.capitalTotal
+                              locationData.locationSchedule[index].capitalTotalLocation >
+                                yearData.capitalTotal
                                 ? "font-semibold"
                                 : "",
                             )}
                           >
                             {formatCurrency(
-                              locationData.locationSchedule[index]
-                                .capitalTotalLocation,
+                              locationData.locationSchedule[index].capitalTotalLocation,
                             )}
                           </td>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
                           <div className="opacity-80">
-                            {DESCRIPTIONS.location.capital}
+                            {t("finance.buyvsrent.desc.rent.capital")}
                           </div>
                           <div className="border-t mb-2 mt-2 w-full" />
-                          Capital total = Capital existant + Epargne +
-                          Plus-value
+                          {t("finance.buyvsrent.tooltip.rent.capital.formula")}
                           <div className="border-t mb-6 mt-2 w-full" />
                           <div className="flex items-center justify-between">
-                            Capital existant
+                            {t("finance.buyvsrent.tooltip.capital.existing")}
                             <div>
                               {formatCurrency(
-                                locationData.locationSchedule[index - 1]
-                                  ?.capitalTotalLocation || apport,
+                                locationData.locationSchedule[index - 1]?.capitalTotalLocation ||
+                                  apport,
                               )}
                             </div>
                           </div>
                           <div className="flex items-center justify-between">
-                            Epargne
+                            {t("finance.buyvsrent.tooltip.rent.capital.savings")}
                             <div>
-                              {formatCurrency(
-                                locationData.locationSchedule[index].difference,
-                              )}
+                              {formatCurrency(locationData.locationSchedule[index].difference)}
                             </div>
                           </div>
                           <div className="flex items-center justify-between">
-                            Plus-value
+                            {t("finance.buyvsrent.tooltip.capital.gain")}
                             <div>
                               {formatCurrency(
-                                locationData.locationSchedule[index]
-                                  .placementInterests,
+                                locationData.locationSchedule[index].placementInterests,
                               )}
                             </div>
                           </div>
                           <div className="border-t mb-2 mt-2 w-full" />
                           <div className="flex items-center justify-between">
-                            Capital total
+                            {t("finance.buyvsrent.tooltip.capital.total")}
                             <div>
                               {formatCurrency(
-                                locationData.locationSchedule[index]
-                                  .capitalTotalLocation,
+                                locationData.locationSchedule[index].capitalTotalLocation,
                               )}
                             </div>
                           </div>
@@ -1408,8 +1247,7 @@ export function AchatLocation() {
                 data={mortgageData.schedule.map((yearData, index) => ({
                   year: yearData.year,
                   achat: yearData.capitalTotal,
-                  location:
-                    locationData.locationSchedule[index].capitalTotalLocation,
+                  location: locationData.locationSchedule[index].capitalTotalLocation,
                 }))}
                 margin={{
                   left: 12,

@@ -2,11 +2,10 @@
 import Layout from "@/layouts/Layout.astro";
 import { AchatLocationPage } from "@/components/react/achat-location-page.tsx";
 import TopNav from "@/components/top-nav.astro";
-const description =
-  "En France, on dit souvent qu'acheter est plus intéressant que louer, notamment à cause des loyers qui seraient \"jeter de l'argent par les fenetres\". Mais la réalité économique est plus nuancée, comme le montre ce comparatif.";
+import { t } from "@/i18n";
 ---
 
-<Layout title="Achat vs Location" description={description}>
+<Layout title={t("finance.buyvsrent.title")} description={t("finance.buyvsrent.subtitle")}>
   <div class="px-5 pt-2">
     <TopNav backHref="/" backTextKey="nav.goHome" hideHome />
   </div>
