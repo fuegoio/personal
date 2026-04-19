@@ -11,12 +11,12 @@ interface Props {
 const { url, year, nameKey, descriptionKey } = Astro.props;
 ---
 
-<div class="border bg-card">
+<a href={url} class="border bg-card block hover:border-foreground transition-all hover:shadow-xl group" target="_blank">
   <div class="p-4">
     <div class="flex items-center gap-4">
-      <a href={url} class="font-semibold flex-1"><T key={nameKey} /></a>
+      <span class="font-semibold flex-1 group-hover:underline transition-all underline-offset-4"><T key={nameKey} /></span>
       <div class="text-gray-500 text-sm">{year}</div>
     </div>
     <T key={descriptionKey} class="text-sm" />
   </div>
-</div>
+</a>
