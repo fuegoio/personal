@@ -24,6 +24,7 @@
   "project.mots.desc": "A portable dictionary to learn new words.",
   "project.gitradar.desc": "Discover new GitHub repositories based on your stars and trends.",
   "project.maille.desc": "Complex personal finance tool for engineers.",
+  "project.sunred.desc": "Modern RSS Reader with social based on AT Proto.",
   "library.trpc-monitoring.desc": "tRPC middleware to automatically add OTel and Logging of all procedures.",
   "library.trpc-db.desc": "tRPC collection for TanStack DB, enabling real time sync.",
   "tool.buyvsrent.name": "Buy vs rent",

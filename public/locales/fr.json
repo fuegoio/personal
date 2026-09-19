@@ -24,6 +24,7 @@
   "project.mots.desc": "Un dictionnaire portable pour apprendre de nouveaux mots.",
   "project.gitradar.desc": "Découvrir des repos Github intéressants basés sur ses préférences.",
   "project.maille.desc": "Outil compliqué de gestion de finance personnelle pour les ingénieurs.",
+  "project.sunred.desc": "Lecteur de flux RSS avec des capacités sociales basées sur AT Proto.",
   "library.trpc-monitoring.desc": "Middleware tRPC pour ajouter automatiquement OTel et la journalisation de toutes les procédures.",
   "library.trpc-db.desc": "Collection tRPC pour TanStack DB, permettant la synchronisation en temps réel.",
   "tool.buyvsrent.name": "Achat vs Location",
